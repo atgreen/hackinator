@@ -9,7 +9,7 @@
     {
       "name": "hackinator",
       "description": "Personal skills for hacking in the original sense: creative building and the craft of making things elegant",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "source": "./",
       "author": {
         "name": "Anthony Green",

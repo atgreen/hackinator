@@ -6,6 +6,21 @@ Not breaking into things. **Making** things. A hack is a clever, playful, well-c
 the kind that makes another hacker smile. This is a personal, language-agnostic skills library for
 [Claude Code](https://claude.com/claude-code).
 
+## The workflow
+
+For any non-trivial build, **hacking-workflow** is the front door. Say *"let's build X"* or
+*"start a hacking session"* and it runs the loop, right-sizing the ceremony to the work:
+
+```
+shape → isolate → plan → build → craft → verify → review → finish
+```
+
+…with inviolable human-approval gates (what you build, and how it lands) and everything tracked in
+beads. The process skills behind it: **shaping** (understand + approve before code), **planning**
+(design → tasks → beads), **test-first** (keeper code gets a failing test first; spikes exempt),
+**evidence-before-claims** (no "done" without fresh output), **reviewing-work** (fresh reviewer +
+receiving feedback well), **finishing** (prove green → human picks merge/PR/keep → clean up).
+
 ## Two moods, shared craft
 
 **Personas** are your entry points:
@@ -47,6 +62,19 @@ Or drop the contents of `skills/` into `~/.claude/skills/` for a purely personal
 - Subtraction is progress.
 - Ship something that runs.
 - If it isn't a little bit fun, you're doing it wrong.
+
+## Acknowledgements
+
+hackinator is inspired by two excellent skill libraries, both MIT-licensed:
+
+- [**superpowers**](https://github.com/obra/superpowers) by Jesse Vincent — the disciplined
+  development loop (shape → plan → build → verify → review → finish), the test-first and
+  evidence-before-claims rigor, and the skill-authoring philosophy.
+- **gstack** by Garry Tan — the persona-driven skill model and the idea of a personal,
+  opinionated suite that encodes how *you* like to work.
+
+The skills here are original writing that adapts their ideas to a personal, language-agnostic
+suite; no text was copied. Gratitude to both projects for showing the way.
 
 ## License
 

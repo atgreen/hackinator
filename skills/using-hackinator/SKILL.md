@@ -25,6 +25,28 @@ correctness. Build first, then reveal the simple thing hiding inside what you bu
 - **Two heads beat one on hard problems.** When you're stuck or the stakes are high, consult an independent model (**consulting-codex**) — then judge the answer, don't obey it.
 - **Play.** If it isn't a little bit fun, you're doing it wrong.
 
+## The Workflow (the front door for any non-trivial build)
+
+For real work — anything past a quick edit — start with **hacking-workflow**. It sequences the whole
+loop and enforces the human-approval gates, right-sizing the ceremony (a spike skips most of it):
+
+```
+shape → isolate → plan → build → craft → verify → review → finish
+```
+
+| Phase | Skill | In one line |
+|---|---|---|
+| Shape | **shaping** | Understand + get buy-in **before** any code (the approval gate) |
+| Isolate | **using-worktrees** | A clean workspace so nothing races or leaks onto main |
+| Plan | **planning** | Map files + right-sized tasks, filed as beads |
+| Build | **builder** / **test-first** | Make it work; keeper code is test-first |
+| Craft | **whittler** | Make it elegant, behavior-preserving |
+| Verify | **evidence-before-claims** | No "done" without fresh command output |
+| Review | **reviewing-work** | Fresh reviewer subagent; handle feedback technically |
+| Finish | **finishing** | Land it the way the human chooses; clean up |
+
+Track the whole thing in beads throughout (**using-beads**).
+
 ## Two Personas
 
 | You want to... | Invoke | Mood |
@@ -51,9 +73,10 @@ Personas are entry points. They lean on the shared techniques below and will pul
 ## How to Choose
 
 ```
+Non-trivial build or change? → hacking-workflow (runs the whole loop with gates)
 Nothing runs yet?            → builder  (which starts with walking-skeleton)
 It runs but it's ugly?       → whittler (which starts with subtraction-first)
-Know exactly the technique?  → invoke the technique skill directly
+Know exactly the technique?  → invoke the technique/process skill directly
 ```
 
 ## Authoring New Skills

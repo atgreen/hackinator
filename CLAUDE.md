@@ -4,6 +4,13 @@ Personal skills for **hacking in the original sense** — building for the joy o
 result beautiful. Not security; craft. A hack is a clever, playful, well-made solution that makes
 another hacker smile.
 
+## The workflow
+
+For any non-trivial build, **hacking-workflow** is the front door — it runs the loop
+`shape → isolate → plan → build → craft → verify → review → finish` with inviolable human-approval
+gates, tracked in beads throughout. Process skills: `shaping`, `planning`, `test-first`,
+`evidence-before-claims`, `reviewing-work`, `finishing`.
+
 ## The two moods
 
 - **builder** — make an idea real, fast. Bias toward a running artifact over a finished argument.
@@ -26,6 +33,13 @@ the host), `using-worktrees` (isolate parallel edits), `using-beads` (track the 
 ```
 skills/
   using-hackinator/   # ethos + router (entry point)
+  hacking-workflow/   # the front-door loop: shape→…→finish, with gates
+  shaping/            # process: understand + approval gate before code
+  planning/           # process: design → right-sized tasks, filed as beads
+  test-first/         # process: keeper code gets a failing test first (spikes exempt)
+  evidence-before-claims/ # process: no "done" without fresh verification output
+  reviewing-work/     # process: fresh reviewer subagent + receiving feedback well
+  finishing/          # process: prove green → human picks how it lands → clean up
   builder/            # persona: make it work
   whittler/           # persona: make it beautiful
   walking-skeleton/   # technique
