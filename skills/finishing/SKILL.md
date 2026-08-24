@@ -17,6 +17,18 @@ Run the **full** test/build suite on the actual code about to land, right now. A
 before your last change does not count (**evidence-before-claims**). Red suite → stop and fix, or
 surface it; don't land red.
 
+**Green includes warning-clean.** A build that passes while emitting compiler warnings is not
+green — warnings are the compiler reporting probable bugs at the cheapest possible moment, and a
+warning tolerated today is invisible tomorrow (it scrolls by in every future build until nobody
+reads any of them). Before landing:
+
+- Read the build output, don't just check the exit code. `unused`, `dead_code`, deprecation, and
+  type-lint warnings all get fixed or explicitly gated (`#[cfg(...)]`, `#[allow(...)]` **with a
+  comment saying why**), never ignored.
+- "It's pre-existing" is not an exemption — file it as a bead if it's out of scope, so it stays
+  visible. "It's only in release/debug profile" is not an exemption — check the profile you don't
+  normally build.
+
 ## Step 2 — Detect Where You Are
 
 You can't present the right options until you know the git situation:
@@ -56,6 +68,8 @@ never a default or a misread.
 ## Common Mistakes
 
 - **Landing on a stale green.** Re-run the full suite on the final tree; earlier passes don't certify it.
+- **Calling a warning-emitting build "green."** Exit code 0 with warnings scrolling by is not green.
+  Fix them, gate them with a commented `allow`/`cfg`, or bead them — never scroll past them.
 - **Merging without asking.** Integration is the human's decision. Present the menu; wait.
 - **Discarding on a vague "scrap it."** Require the typed `discard`. Work is expensive; deletion is forever.
 - **Force-removing a worktree with uncommitted changes.** That's silent data loss. Surface the files and ask.
