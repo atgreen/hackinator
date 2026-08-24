@@ -3,8 +3,9 @@
 > Skills for hacking in the *original* sense — building for the joy of it, and making the result beautiful.
 
 Not breaking into things. **Making** things. A hack is a clever, playful, well-crafted solution —
-the kind that makes another hacker smile. This is a personal, language-agnostic skills library for
-[Claude Code](https://claude.com/claude-code).
+the kind that makes another hacker smile. This is a personal, language-agnostic skills library in
+the portable `SKILL.md` (Agent Skills) format — it works with
+[Claude Code](https://claude.com/claude-code) and [Codex CLI](https://github.com/openai/codex) alike.
 
 ## The workflow
 
@@ -46,14 +47,35 @@ Start at **using-hackinator** — it carries the ethic and routes you to the rig
 
 ## Install
 
-Once pushed to GitHub:
+Each skill is a plain `SKILL.md` with `name`/`description` frontmatter, so any harness that reads
+the Agent Skills format can load it. `install.sh` symlinks every skill into the personal skill
+trees of both runtimes — symlinks, so edits in this repo take effect immediately:
+
+```
+./install.sh              # Claude Code (~/.claude/skills) and Codex (~/.codex/skills)
+./install.sh --claude     # just one runtime
+./install.sh --codex
+./install.sh --uninstall  # remove hackinator's symlinks
+```
+
+Claude Code can alternatively install it as a plugin:
 
 ```
 /plugin marketplace add atgreen/hackinator
 /plugin install hackinator@hackinator-dev
 ```
 
-Or drop the contents of `skills/` into `~/.claude/skills/` for a purely personal setup.
+### Running under Codex (or another harness)
+
+The skills are written harness-neutral and degrade gracefully where runtimes differ:
+
+- **Subagents and worktree isolation** — `dispatching-subagents` and `using-worktrees` prefer the
+  harness's native isolation when it exists (Claude Code's `isolation: "worktree"` flag); on a
+  runtime without one, the same skills' manual `git worktree` path applies.
+- **Second opinions** — `consulting-codex` is symmetric: the point is an *independent* model, not a
+  specific CLI. From Claude Code, consult `codex`; from Codex, consult `claude -p`.
+- **Beads everywhere** — `bd` is an external CLI, so `using-beads` and the workflow's tracking work
+  identically in any harness. Repo-level agent instructions live in both `CLAUDE.md` and `AGENTS.md`.
 
 ## The ethic
 
