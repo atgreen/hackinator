@@ -57,6 +57,23 @@ Phase 7 — FINISH       land it the way the human chooses; clean up
 
 Build and craft interleave per slice; verify and review gate each meaningful chunk, not just the end.
 
+## Commit at Every Green Slice
+
+```
+GREEN EVIDENCE = COMMIT POINT
+```
+
+The moment a slice verifies — fresh output in hand (**evidence-before-claims**) — commit it on the
+isolated branch, with the slice as the message. Uncommitted work must never outlive the slice that
+produced it. A commit is a **checkpoint, not a publication**: this loop is your standing authority
+to commit on the work branch; *pushing* and *landing* stay human gates (Phase 7).
+
+| The excuse | The answer |
+|---|---|
+| "I'll commit when it's all done" | Then one bad edit can cost the session. Checkpoint the green. |
+| "It's not clean enough to commit" | Clean is Phase 4's job. Commit the working ugly version — that's the block whittling carves from. |
+| "It'll get squashed anyway" | Fine — squashing later is trivial. Recovering lost uncommitted work isn't. |
+
 ## The Gates Are Inviolable
 
 Three things are the human's call, never yours, no matter the time pressure:
@@ -71,4 +88,5 @@ Everywhere else, **decide and record the ruling** (in a bead) rather than stalli
 - **Skipping Phase 0 because the idea "is obvious."** Obvious ideas are where scope creep hides. Get buy-in.
 - **Coding on `main`.** Isolate first (Phase 1), or you can't cleanly abandon a bad path.
 - **Claiming done from Phase 3.** "It compiles" is not "it works." Phase 5 exists for a reason.
+- **Hoarding changes until Phase 7.** A wall of uncommitted work is unreviewable and one mistake from gone. Green slice → commit, every time.
 - **Running the full loop for a spike.** Ceremony must match the work. Classify first.

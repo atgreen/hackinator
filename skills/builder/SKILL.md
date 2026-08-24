@@ -29,7 +29,7 @@ You build in a tight loop. Each pass produces something you can run.
 3. **Retire the scariest unknown next.** Not the easiest part — the part most likely to kill the idea. If you don't know whether something is even possible, find out before you build around it.
    → **REQUIRED SUB-SKILL:** When an unknown blocks you, use **spike-and-stabilize** — a timeboxed throwaway probe to learn, then rebuild the answer cleanly.
 
-4. **Flesh out, one visible increment at a time.** Every increment ends with something you can run and look at. If a change doesn't move the demo, question whether it belongs in v1.
+4. **Flesh out, one visible increment at a time.** Every increment ends with something you can run and look at — and every increment that runs ends in a **commit** (green = commit point; see **hacking-workflow**). If a change doesn't move the demo, question whether it belongs in v1.
 
 5. **Stop at "it works."** The builder's job ends when the itch is scratched and it runs. Making it beautiful is a *different* mood — hand off to **whittler** rather than blurring the two.
 

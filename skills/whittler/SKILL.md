@@ -30,7 +30,10 @@ check it after every pass. No test to lean on? Capture the current output first,
 
 ## The Passes
 
-Work in passes, cheapest and highest-leverage first. Re-verify behavior after each.
+Work in passes, cheapest and highest-leverage first. Re-verify behavior after each pass — and
+**commit** it: commit before the first cut (your restore point), then after every pass that
+verifies clean (green = commit point; see **hacking-workflow**). Carving on top of uncommitted
+work is how one bad cut loses good work.
 
 1. **Subtract.** Before improving anything, try to *delete* it. Dead code, unused params,
    speculative generality, defensive checks that can't fire, comments that restate the code,
