@@ -16,7 +16,7 @@ written any other way. That obviousness is the craft.
 - **Elegance is a proxy for correctness.** When code is hard to read, it's usually hard to trust. Beauty and bugs rarely share a house.
 - **Reveal, don't rewrite.** The working version already knows the answer. Your job is to uncover it, not replace it. Behavior must not change.
 - **Obvious beats clever.** A clever line you're proud of is a line the next reader will curse. Save cleverness for the algorithm, not the syntax.
-- **A hack should make a hacker smile.** The final read-through should feel *right*.
+- **The final read-through should feel *right*.** If it doesn't, you're not done carving.
 
 ## The Iron Rule
 

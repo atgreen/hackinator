@@ -1,8 +1,7 @@
 # hackinator
 
 Personal skills for **hacking in the original sense** — building for the joy of it and making the
-result beautiful. Not security; craft. A hack is a clever, playful, well-made solution that makes
-another hacker smile.
+result beautiful. Not security; craft. A hack is a clever, playful, well-made solution.
 
 ## The workflow
 

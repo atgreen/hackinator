@@ -8,8 +8,8 @@ description: Use when starting creative build or craft work, deciding which hack
 ## Overview
 
 Hacking in the *original* sense: not breaking in, but **building for the joy of it** and
-**making the result beautiful**. A hack is a clever, playful, well-crafted solution — the
-kind that makes another hacker smile. This suite has two moods and the techniques behind them.
+**making the result beautiful**. A hack is a clever, playful, well-crafted solution. This
+suite has two moods and the techniques behind them.
 
 **Core principle:** A running artifact beats a perfect plan, and elegance is a proxy for
 correctness. Build first, then reveal the simple thing hiding inside what you built.
