@@ -1,0 +1,10 @@
+{
+  "skills": ["shaping"],
+  "query": "I want to build a little tool that reminds me to water my plants. Where do I start?",
+  "expected_behavior": [
+    "Selects shaping — the goal is not yet pinned down",
+    "Asks clarifying questions and agrees a direction before proposing tasks or code",
+    "Does not jump straight to a task breakdown or start scaffolding"
+  ],
+  "should_not_select": ["planning", "builder"]
+}

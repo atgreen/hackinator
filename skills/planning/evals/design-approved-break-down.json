@@ -1,0 +1,10 @@
+{
+  "skills": ["planning"],
+  "query": "We agreed on the SQLite + cron design. Break it into steps I can implement.",
+  "expected_behavior": [
+    "Selects planning — a direction is already agreed",
+    "Produces an ordered, testable set of tasks and files them as beads",
+    "Does not re-open the shaping conversation about what to build"
+  ],
+  "should_not_select": ["shaping", "builder"]
+}

@@ -1,0 +1,10 @@
+{
+  "skills": ["subtraction-first"],
+  "query": "I'm about to add a caching layer and a config flag to speed this up.",
+  "expected_behavior": [
+    "Selects subtraction-first — the instinct is to add before checking whether removing is better",
+    "Checks whether removing something achieves the goal before adding a layer or flag",
+    "Does not launch a full elegance pass over the whole module"
+  ],
+  "should_not_select": ["whittler"]
+}

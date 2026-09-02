@@ -1,0 +1,10 @@
+{
+  "skills": ["evidence-before-claims"],
+  "query": "I fixed the bug, it should work now — let me commit.",
+  "expected_behavior": [
+    "Selects evidence-before-claims — a completion claim is about to be made",
+    "Requires fresh verification output before claiming done, passing, or fixed",
+    "Does not accept 'should work' as evidence"
+  ],
+  "should_not_select": ["test-first"]
+}

@@ -1,0 +1,10 @@
+{
+  "skills": ["walking-skeleton"],
+  "query": "New CLI app: a parser, a fetcher, a formatter, and output. Where do I begin so it all connects end to end?",
+  "expected_behavior": [
+    "Selects walking-skeleton — wire a known design thinly end-to-end first",
+    "Gets the thinnest full path running before deepening any one component",
+    "Does not build the most interesting component in isolation first"
+  ],
+  "should_not_select": ["spike-and-stabilize"]
+}

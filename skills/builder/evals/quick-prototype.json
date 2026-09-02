@@ -1,0 +1,10 @@
+{
+  "skills": ["builder"],
+  "query": "Just hack together a quick prototype that scrapes the page and prints the titles.",
+  "expected_behavior": [
+    "Selects builder — making something real from scratch, fast",
+    "Biases toward a running artifact over a finished argument",
+    "Does not start polishing or refactoring code that does not exist yet"
+  ],
+  "should_not_select": ["whittler", "shaping"]
+}

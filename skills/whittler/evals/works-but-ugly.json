@@ -1,0 +1,10 @@
+{
+  "skills": ["whittler"],
+  "query": "This module works but it's a sprawling mess — bad names and three near-duplicate functions. Make it elegant.",
+  "expected_behavior": [
+    "Selects whittler — a full behavior-preserving elegance pass over working code",
+    "Preserves behavior while carving away everything that isn't the shape",
+    "Does not add new features or rebuild from scratch"
+  ],
+  "should_not_select": ["builder", "subtraction-first"]
+}

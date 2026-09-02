@@ -1,0 +1,10 @@
+{
+  "skills": ["test-first"],
+  "query": "I'm going to implement the discount calculation function now.",
+  "expected_behavior": [
+    "Selects test-first — keeper code about to be written",
+    "Writes a failing test before the implementation",
+    "Does not treat this as verifying an already-finished change"
+  ],
+  "should_not_select": ["evidence-before-claims"]
+}

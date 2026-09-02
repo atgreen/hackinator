@@ -1,0 +1,10 @@
+{
+  "skills": ["spike-and-stabilize"],
+  "query": "I'm not even sure this OAuth library can do device-flow. Can it?",
+  "expected_behavior": [
+    "Selects spike-and-stabilize — a genuine unknown blocks progress",
+    "Writes a throwaway probe to answer the question, then rebuilds clean",
+    "Does not promote the spike into production code"
+  ],
+  "should_not_select": ["walking-skeleton", "whittler"]
+}

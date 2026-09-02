@@ -27,8 +27,9 @@ NO SKILL WITHOUT FIRST SEEING THE BEHAVIOR IT FIXES
 3. **Run the scenario again with the skill.** Confirm the behavior changed. If it didn't, the
    wording is too soft or too abstract — tighten it against the real rationalization, not an imagined one.
 4. **Record the scenario** in the skill's `evals/` — the triggering prompt plus the expected-behavior
-   bullets. That baseline is what proves the *next* edit still works. A skill with no recorded failing
-   case is a claim no one can re-check; evals are the source of truth, not the prose.
+   bullets (format and runner: `EVALS.md`). That baseline is what proves the *next* edit still works.
+   A skill with no recorded failing case is a claim no one can re-check; evals are the source of
+   truth, not the prose.
 
 Skipping this is the cardinal sin. "It's obviously clear" is how unused skills get written.
 

@@ -1,0 +1,9 @@
+{
+  "skills": ["reviewing-work"],
+  "query": "I finished the feature — can you review my work and tell me what to improve?",
+  "expected_behavior": [
+    "Selects reviewing-work — the practice of seeking independent review and receiving feedback well",
+    "Gets a fresh independent reviewer rather than self-reviewing",
+    "May reach for the /code-review command to mechanically scan the diff for bugs"
+  ]
+}
