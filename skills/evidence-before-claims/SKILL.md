@@ -1,6 +1,6 @@
 ---
 name: evidence-before-claims
-description: Use before claiming ANYTHING works, passes, is fixed, or is done — before every commit, PR, task hand-off, or "it should work now". Triggers on the urge to say done, or words like "should", "probably", "that fixes it", "all green"
+description: Use before claiming ANYTHING works, passes, is fixed, or is done — before every commit, PR, task hand-off, or "it should work now". Triggers on the urge to say done, or words like "should", "probably", "that fixes it", "all green". Not for writing the failing test that drives new code — that's test-first
 ---
 
 # Evidence-Before-Claims

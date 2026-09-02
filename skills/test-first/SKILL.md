@@ -1,6 +1,6 @@
 ---
 name: test-first
-description: Use when implementing keeper code — any behavior meant to last, and especially when fixing a bug. Triggers on writing a function/feature you intend to keep, "add a test", "TDD", or the urge to write the code first and test it "after"
+description: Use when implementing keeper code — any behavior meant to last, and especially when fixing a bug. Triggers on writing a function/feature you intend to keep, "add a test", "TDD", or the urge to write the code first and test it "after". Not for verifying a finished change before claiming it works — that's evidence-before-claims
 ---
 
 # Test-First

@@ -1,6 +1,6 @@
 ---
 name: subtraction-first
-description: Use when improving existing code and the instinct is to add — a wrapper, a flag, a layer, a helper, a config option — before checking whether removing something is the better move; or when code feels bloated, over-engineered, or hard to hold in your head
+description: Use when improving existing code and the instinct is to add — a wrapper, a flag, a layer, a helper, a config option — before checking whether removing something is the better move; or when code feels bloated, over-engineered, or hard to hold in your head. Not for a full readability-and-elegance pass over working code — that's whittler
 ---
 
 # Subtraction-First

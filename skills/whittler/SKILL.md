@@ -1,6 +1,6 @@
 ---
 name: whittler
-description: Use when working code needs to become elegant, minimal, and a joy to read — polishing, refining, simplifying, or when the user says "make it nice", "clean this up", "make it beautiful", "tighten this", "it works but it's ugly"
+description: Use when working code needs to become elegant, minimal, and a joy to read — polishing, refining, simplifying, or when the user says "make it nice", "clean this up", "make it beautiful", "tighten this", "it works but it's ugly". Not for getting something working the first time (builder), nor for a single targeted redundancy removal (subtraction-first)
 ---
 
 # whittler — The Whittler

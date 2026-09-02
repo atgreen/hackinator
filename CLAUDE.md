@@ -59,8 +59,10 @@ Flat namespace, one `SKILL.md` per skill.
 
 When adding or editing a skill, use the **writing-skills** skill. In short:
 
-- **Descriptions state triggers only** — start with "Use when…", list symptoms and phrases, and
-  **never summarize the workflow** (agents follow the description instead of reading the skill).
+- **Descriptions = capability clause + triggers + exclusion clause** — name what the skill does, then
+  "Use when…" symptoms/phrases, then "Not for X — that's **sibling**" when a near-neighbour exists
+  (with ~20 skills, the wrong one gets picked without it). **Never summarize the workflow** (agents
+  follow the description instead of reading the skill).
 - **Active, verb-first names** (`subtraction-first`, not `code-reduction`).
 - **Personas cross-reference techniques** via `**REQUIRED SUB-SKILL:** Use **name**` markers —
   never `@`-link (it force-loads and burns context).

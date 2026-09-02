@@ -1,6 +1,6 @@
 ---
 name: spike-and-stabilize
-description: Use when a genuine unknown blocks progress — "can this even be done?", an unfamiliar API or library, an uncertain approach — and you're tempted to either research forever or build production code around something you don't yet understand
+description: Use when a genuine unknown blocks progress — "can this even be done?", an unfamiliar API or library, an uncertain approach — and you're tempted to either research forever or build production code around something you don't yet understand. Not for wiring a known design thinly end-to-end (that's walking-skeleton), nor for polishing working code (whittler)
 ---
 
 # Spike and Stabilize

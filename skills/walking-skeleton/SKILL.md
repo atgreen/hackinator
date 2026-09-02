@@ -1,6 +1,6 @@
 ---
 name: walking-skeleton
-description: Use when starting anything new and unsure where to begin, tempted to build the interesting component first, or when a prototype has many parts that don't yet connect end to end
+description: Use when starting anything new and unsure where to begin, tempted to build the interesting component first, or when a prototype has many parts that don't yet connect end to end. Not for a throwaway probe to answer an unknown you'll then delete — that's spike-and-stabilize
 ---
 
 # Walking Skeleton

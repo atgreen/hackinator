@@ -1,6 +1,6 @@
 ---
 name: builder
-description: Use when making an idea real from scratch, prototyping, spiking, scratching an itch, or when the user says "build this", "hack this up", "let's make something", "prototype", "get it working"
+description: Use when making an idea real from scratch, prototyping, spiking, scratching an itch, or when the user says "build this", "hack this up", "let's make something", "prototype", "get it working". Not for polishing code that already works — that's whittler
 ---
 
 # builder — The Builder

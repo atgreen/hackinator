@@ -26,6 +26,9 @@ NO SKILL WITHOUT FIRST SEEING THE BEHAVIOR IT FIXES
 2. **Write the minimal skill** that addresses *that* failure — not every hypothetical cousin of it.
 3. **Run the scenario again with the skill.** Confirm the behavior changed. If it didn't, the
    wording is too soft or too abstract — tighten it against the real rationalization, not an imagined one.
+4. **Record the scenario** in the skill's `evals/` — the triggering prompt plus the expected-behavior
+   bullets. That baseline is what proves the *next* edit still works. A skill with no recorded failing
+   case is a claim no one can re-check; evals are the source of truth, not the prose.
 
 Skipping this is the cardinal sin. "It's obviously clear" is how unused skills get written.
 
@@ -34,7 +37,7 @@ Skipping this is the cardinal sin. "It's obviously clear" is how unused skills g
 ```
 ---
 name: active-verb-first-name
-description: Use when <triggers, symptoms, and phrases only>
+description: <one capability clause> — Use when <triggers/symptoms/phrases>. Not for <neighbour> — that's <other-skill>
 ---
 
 # Name
@@ -45,9 +48,12 @@ description: Use when <triggers, symptoms, and phrases only>
 
 ## The Rules That Matter Most
 
-- **Description = triggers only.** Start with "Use when…", list symptoms and the phrases a user
-  would actually type. **Never summarize the workflow** — agents follow a described workflow
-  *instead of* reading the skill, and act on the summary's gaps. Say *when*, never *how*.
+- **Description = one capability clause + triggers + one exclusion clause; never the procedure.**
+  Name *what the skill does* in a phrase, then the triggers ("Use when…" — symptoms and the phrases a
+  user would actually type). When a near-neighbour skill exists, end with a "Not for X — that's
+  **other-skill**" clause: with ~20 skills in the suite, invocation is unreliable and the wrong one
+  gets picked without it. **Never summarize the workflow** — agents follow a described workflow
+  *instead of* reading the skill, and act on the summary's gaps. State *what* and *when*, never *how*.
 - **Name for what you do.** Active, verb-first: `subtraction-first`, not `code-reduction`;
   `naming-as-design`, not `naming-utilities`. Gerunds work well for processes.
 - **Keywords an agent would search for** — real phrases, error strings, symptoms — scattered
@@ -72,7 +78,13 @@ negotiates with them. A recipe leaves nothing to negotiate.
 ## Common Mistakes
 
 - **Narrative instead of technique.** "In this project we found…" — strip the story, keep the move.
-- **Description that leaks the workflow.** The most common and most damaging error. Triggers only.
+- **Description that leaks the workflow.** The most common and most damaging error. Capability +
+  triggers + exclusion — never the how.
+- **No exclusion clause when a sibling exists.** Two skills with overlapping triggers both fire, or
+  the wrong one wins. Name the boundary: "Not for X — that's **sibling**".
+- **Rewriting the rule on one surprise.** A single odd case is an anecdote. Change a skill (or this
+  rubric) when the *same* friction recurs, not on the first exception — otherwise the process churns
+  faster than it learns.
 - **Skill for something a regex could enforce.** If it's mechanically checkable, automate it; save
   skills for judgment calls.
 - **Shipping untested.** A skill you didn't watch change behavior is a guess, not a skill.

@@ -1,6 +1,6 @@
 ---
 name: reviewing-work
-description: Use after finishing a task or feature and before it lands — getting an independent review, and handling the feedback well. "review this", "code review", "check my work", or when receiving review comments (from a person, a subagent, or Codex)
+description: Use after finishing a task or feature and before it lands — getting an independent review, and handling the feedback well. "review this", "code review", "check my work", or when receiving review comments (from a person, a subagent, or Codex). To mechanically scan the current diff for bugs, use the /code-review command; this skill is the practice of seeking independent review and receiving feedback well
 ---
 
 # Reviewing-Work

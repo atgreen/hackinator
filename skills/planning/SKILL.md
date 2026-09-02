@@ -1,6 +1,6 @@
 ---
 name: planning
-description: Use after a design is approved and before implementing anything architectural — turning an agreed direction into an ordered, testable set of tasks. "write a plan", "break this down", "what are the steps", "plan the implementation"
+description: Use after a design is approved and before implementing anything architectural — turning an agreed direction into an ordered, testable set of tasks. "write a plan", "break this down", "what are the steps", "plan the implementation". Not for the understand-and-get-buy-in step before a design exists — that's shaping
 ---
 
 # Planning

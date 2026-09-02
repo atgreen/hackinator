@@ -1,6 +1,6 @@
 ---
 name: shaping
-description: Use at the very start of any non-trivial build, BEFORE writing code or scaffolding — turning a rough idea into an understood, agreed direction. "let's build X", "I want to make Y", "how should I approach Z", or any request where the goal isn't yet pinned down
+description: Use at the very start of any non-trivial build, BEFORE writing code or scaffolding — turning a rough idea into an understood, agreed direction. "let's build X", "I want to make Y", "how should I approach Z", or any request where the goal isn't yet pinned down. Not for turning an already-agreed design into ordered tasks — that's planning
 ---
 
 # Shaping
