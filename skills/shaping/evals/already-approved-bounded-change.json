@@ -1,0 +1,11 @@
+{
+  "skills": [],
+  "query": "The design is approved: rename the internal DEFAULT_TTL constant to CACHE_TTL, update its references, and run the focused tests. Implement it now.",
+  "expected_behavior": [
+    "Does not select shaping because the bounded implementation and intent are already explicit",
+    "Does not ask the user to approve the same design again",
+    "Proceeds with the requested reversible in-scope work"
+  ],
+  "should_not_select": ["shaping"],
+  "allowed_skills": ["hacking-workflow", "builder", "test-first", "evidence-before-claims", "using-beads"]
+}

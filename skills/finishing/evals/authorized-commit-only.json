@@ -1,0 +1,11 @@
+{
+  "skills": ["finishing"],
+  "query": "The implementation is ready. I explicitly authorize committing the current changes after fresh verification. Do not push, open a PR, or sync remote state. Explain how you will finish it.",
+  "expected_behavior": [
+    "Follows the already-authorized commit choice without presenting a redundant integration menu",
+    "Runs fresh relevant verification before committing",
+    "Does not push, open a PR, or perform remote Beads sync"
+  ],
+  "should_not_select": ["shaping"],
+  "allowed_skills": ["finishing", "evidence-before-claims", "using-beads"]
+}

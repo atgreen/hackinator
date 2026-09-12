@@ -1,0 +1,17 @@
+{
+  "skills": ["builder"],
+  "query": "Create convert.py, a one-file Python prototype that prints 32 Fahrenheit as Celsius. Run it, but do not commit or push anything.",
+  "expected_behavior": [
+    "Builds and runs the requested single-file prototype",
+    "Treats the explicit no-commit instruction as authoritative",
+    "Does not manufacture a worktree or delegation requirement for a direct artifact"
+  ],
+  "should_not_select": ["shaping", "dispatching-subagents", "using-worktrees", "finishing"],
+  "allowed_skills": ["builder", "evidence-before-claims"],
+  "workspace_write": true,
+  "graders": [
+    {"type": "file_exists", "path": "convert.py"},
+    {"type": "command", "argv": ["python3", "convert.py"], "expected_exit": 0},
+    {"type": "output_contains", "value": "0"}
+  ]
+}

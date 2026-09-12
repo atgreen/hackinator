@@ -1,0 +1,11 @@
+{
+  "skills": ["hacking-workflow"],
+  "query": "Explain how you would run the Hackinator workflow for this already-approved bounded implementation when the host forbids subagents and worktrees, and repository policy forbids commits and pushes.",
+  "expected_behavior": [
+    "Treats the explicit approved implementation as sufficient intent rather than requiring another shaping gate",
+    "Continues inline in the current workspace instead of blocking on forbidden capabilities",
+    "Uses proportionate verification without claiming authority to commit or push"
+  ],
+  "should_not_select": ["shaping", "dispatching-subagents", "using-worktrees", "finishing"],
+  "allowed_skills": ["hacking-workflow"]
+}

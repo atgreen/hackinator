@@ -7,43 +7,47 @@ description: Use at the very start of any non-trivial build, BEFORE writing code
 
 ## Overview
 
-**Core principle:** Understand the work and get the human's buy-in *before* building anything. The
+**Core principle:** Resolve unclear intent and consequential design choices *before* building. The
 cheapest place to fix a design is in conversation; the most expensive is in code you've already
-written. Shaping is where you subtract features, choose an approach, and earn a "yes."
+written. Shaping is where you subtract features, choose an approach, and establish a shared
+direction.
 
-## The Iron Gate
+## The Decision Gate
 
 ```
-NO CODE, NO SCAFFOLDING, NO IMPLEMENTATION SKILL UNTIL THE HUMAN HAS APPROVED THE INTENT
+NO CODE WHILE A MISSING CHOICE WOULD MATERIALLY CHANGE THE RESULT
 ```
 
-This gate is not negotiable and it does not shrink under time pressure. "It's obviously what they
-want" is exactly the assumption that builds the wrong thing fast. Say what you intend to build; wait
-for an explicit yes.
+Do not guess through material ambiguity. But do not invent ambiguity either: an explicit request to
+implement a clear, bounded change supplies intent, and a previously approved design stays approved.
+In those cases, skip shaping and continue with planning or implementation.
 
 ## Classify, and Announce It
 
 State the path out loud so the human can correct you. Complexity only *upgrades* the path.
 
 - **Spike** — "can this even be done?" → shaping is one line: state the question, then go probe (**spike-and-stabilize**).
-- **Bounded** — a clear, contained change → a short in-chat design, one approval, then build.
+- **Bounded but unclear** — a contained change with one material uncertainty → resolve it briefly,
+  record the result, then build.
+- **Bounded and explicit** — the request already pins down the result → shaping is unnecessary.
 - **Architectural** — new system, real choices → the full dialogue below, ending in a written design and the **planning** skill.
 
 ## How to Shape
 
-1. **Ask one question at a time.** A wall of ten questions gets skimmed and half-answered. One
-   sharp question per message, and **prefer multiple-choice** — it's faster for the human and
-   surfaces options they hadn't named. Wait for the answer before the next.
-2. **Propose 2–3 approaches with a recommendation.** Not one (looks like you didn't think) and not
-   five (offloads the decision). Name the trade-offs; say which you'd pick and why.
+1. **Ask only questions whose answers change the result.** Ask one at a time. A wall of ten
+   questions gets skimmed and half-answered. Prefer multiple-choice when the options are genuinely
+   discrete; wait for the answer before the next consequential decision.
+2. **Propose alternatives when a real trade-off exists.** Usually offer 2–3 approaches with a
+   recommendation. Do not manufacture options for a bounded request with one obvious implementation.
 3. **Subtract ruthlessly (YAGNI).** For every feature, ask "does the first real version need this?"
    Default to no. The smallest thing that delivers the core is the thing to build.
-4. **Present the design in sections, approve as you go.** Don't dump a monolith. Goal → approach →
-   the shape of the pieces, checking in at each. Course-correction is cheap here.
+4. **Present architectural designs in sections.** Don't dump a monolith. Goal → approach → the
+   shape of the pieces, checking in at consequential decisions. Course-correction is cheap here.
 
 ## What Shaping Produces
 
-- **Spike/Bounded:** a short, agreed description of what you're about to build — captured as a **bead**.
+- **Spike/unclear bounded work:** a short, agreed description of what you're about to build —
+  captured as a **bead** in a Git repository.
 - **Architectural:** a written design (goal, chosen approach, the pieces and how they fit, what's
   explicitly out of scope), self-reviewed for gaps/placeholders/scope-creep, then **approved by the
   human**. The only next step is **planning**.
@@ -57,8 +61,10 @@ voice — **consulting-codex** for a second opinion — *before* committing to a
 
 ## Common Mistakes
 
-- **Building during the conversation.** "I'll just scaffold while we talk" breaks the gate. Talk first.
+- **Building through a material unknown.** Resolve the choice that changes the result first.
+- **Re-approving explicit work.** A clear implementation request is already a direction; proceed.
 - **Ten questions in one message.** One at a time, multiple-choice where you can.
 - **Presenting one approach as fait accompli.** Give options and a recommendation; let the human choose.
 - **Gold-plating the design.** Every "wouldn't it be nice if…" is scope you'll pay for. Cut it now.
-- **Treating a nod as approval of everything.** Approve section by section; a vague "sounds good" isn't a yes to specifics.
+- **Treating a vague nod as approval of unresolved architecture.** Confirm the choices that actually
+  affect scope or structure, not every sentence.

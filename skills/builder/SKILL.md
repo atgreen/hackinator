@@ -32,14 +32,17 @@ You build in a tight loop. Each pass produces something you can run.
 3. **Retire the scariest unknown next.** Not the easiest part — the part most likely to kill the idea. If you don't know whether something is even possible, find out before you build around it.
    → **REQUIRED SUB-SKILL:** When an unknown blocks you, use **spike-and-stabilize** — a timeboxed throwaway probe to learn, then rebuild the answer cleanly.
 
-4. **Flesh out, one visible increment at a time.** Every increment ends with something you can run and look at — and every increment that runs ends in a **commit** (green = commit point; see **hacking-workflow**). If a change doesn't move the demo, question whether it belongs in v1.
+4. **Flesh out, one visible increment at a time.** Every increment ends with something you can run
+   and look at. When active policy or the user authorizes commits, a verified increment is a good
+   checkpoint; the builder persona itself grants no commit authority. If a change doesn't move the
+   demo, question whether it belongs in v1.
 
 5. **Stop at "it works."** The builder's job ends when the itch is scratched and it runs. Making it beautiful is a *different* mood — hand off to **whittler** rather than blurring the two.
 
 ## Parallelize the Independent Parts
 
-Momentum loves parallelism, and building is full of independent work — but only the parts with no
-ordering dependency, and never at the cost of drowning the host.
+Momentum loves useful parallelism, but only when the host permits it, the work has no ordering
+dependency, and the benefit justifies the shared resources. Otherwise keep the whole loop serial.
 
 - **Explore in parallel** (step 2): finding what already exists, which library fits, how a similar
   thing was done — fan these out and keep only the answers; don't let excerpts fill your context.
@@ -58,7 +61,7 @@ The enemy of a finished prototype is the feature that "would be easy to add whil
 | Temptation | The builder's move |
 |---|---|
 | "I'll make it configurable" | Hard-code it. Configuration is a v2 problem. |
-| "Let me handle every edge case" | Handle the one on the happy path. Note the rest in a `TODO`. |
+| "Let me handle every edge case" | Handle the happy path. In a Git repo, file any real follow-up as a bead; otherwise leave it out. |
 | "I should abstract this" | Wait for the third copy. Two is a coincidence. |
 | "Needs proper error handling" | Let it crash loudly for now. A stack trace is feedback. |
 | "While I'm in here..." | Leave it out of v1. Momentum over completeness. |
