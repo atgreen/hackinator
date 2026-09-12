@@ -59,7 +59,11 @@ bd comment hackinator-5 "Root cause was X"    # progress notes live on the bead
 bd close hackinator-5                          # done
 ```
 
-### Share it — it's git-hosted, so sync
+### Share it when remote sync is authorized
+
+Local issue tracking and remote synchronization are separate actions. Update local Beads state as
+the work changes. Run a remote sync only when the active profile, repository policy, or user grants
+that authority:
 
 ```bash
 bd sync             # pull, reconcile, push the federation loop
@@ -88,7 +92,7 @@ hidden until its blocker closes.
 | Quick capture (ID only) | `bd q "Title"` |
 | Record a blocker | `bd dep add <blocked> <blocker>` |
 | Claim / progress / finish | `bd update <id> --status in_progress` · `bd comment <id> "…"` · `bd close <id>` |
-| Push to remote | `bd sync` (or `bd dolt push`) |
+| Push to remote, when authorized | `bd sync` (or `bd dolt push`) |
 | Full agent workflow | `bd prime` |
 
 ## When It's Overkill
@@ -101,4 +105,6 @@ the default is **on**. When unsure, file the bead; a cheap bead beats a lost tho
 - **Keeping work in your head or in code comments.** That's the exact failure beads exists to prevent. File it.
 - **Batch-filing at the end.** Capture *as work appears* — end-of-session recall drops the small stuff, which is most of it.
 - **Recording no dependencies.** Beads without deps is just a list; the ready/blocked view is the point. Link blockers.
-- **Never syncing.** Unpushed beads don't help the next session or another agent. Sync so the shared memory is actually shared.
+- **Syncing without authority.** Local tracking does not imply permission for a remote side effect.
+  When sync is authorized, do it before handoff so shared memory is actually shared; otherwise
+  report the unsynced local state.

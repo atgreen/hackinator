@@ -1,0 +1,11 @@
+{
+  "skills": ["whittler"],
+  "query": "This small module already works but reads badly. Make it clear without changing behavior. The host forbids subagents and worktrees, and I have not authorized commits.",
+  "expected_behavior": [
+    "Performs the behavior-preserving craft pass serially in the current workspace",
+    "Applies subtraction, naming, and reading-order techniques directly without blocking on extra skill loading",
+    "Re-verifies behavior but does not create commits"
+  ],
+  "should_not_select": ["dispatching-subagents", "using-worktrees", "builder"],
+  "allowed_skills": ["whittler", "subtraction-first", "naming-as-design", "reading-like-prose", "evidence-before-claims"]
+}

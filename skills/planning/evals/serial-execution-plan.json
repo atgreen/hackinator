@@ -1,0 +1,11 @@
+{
+  "skills": ["planning"],
+  "query": "The architecture is approved. Turn it into dependency-ordered Beads that one agent can implement inline because this host forbids subagents and worktrees.",
+  "expected_behavior": [
+    "Produces the same complete dependency-ordered plan without requiring fan-out",
+    "Makes each task independently checkable and actionable by the current agent",
+    "Does not select delegation or worktree skills forbidden by the host"
+  ],
+  "should_not_select": ["dispatching-subagents", "using-worktrees", "shaping"],
+  "allowed_skills": ["planning", "using-beads"]
+}

@@ -1,0 +1,11 @@
+{
+  "skills": ["reviewing-work"],
+  "query": "Review the current diff. This host has no subagents, no second model, and no code-review command, so use the strongest available fallback and do not block.",
+  "expected_behavior": [
+    "Performs an explicit adversarial self-review when no independent mechanism exists",
+    "States the limitation instead of pretending the review is independent",
+    "Returns severity-ranked findings or an evidence-backed no-findings result"
+  ],
+  "should_not_select": ["dispatching-subagents", "consulting-codex"],
+  "allowed_skills": ["reviewing-work", "evidence-before-claims"]
+}

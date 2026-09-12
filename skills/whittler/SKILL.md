@@ -31,23 +31,26 @@ check it after every pass. No test to lean on? Capture the current output first,
 ## The Passes
 
 Work in passes, cheapest and highest-leverage first. Re-verify behavior after each pass — and
-**commit** it: commit before the first cut (your restore point), then after every pass that
-verifies clean (green = commit point; see **hacking-workflow**). Carving on top of uncommitted
-work is how one bad cut loses good work.
+checkpoint verified passes when active policy or the user authorizes commits. Without that
+authority, keep the passes small, preserve the pre-change diff or output as a restore reference,
+and report the verified boundaries clearly.
 
 1. **Subtract.** Before improving anything, try to *delete* it. Dead code, unused params,
    speculative generality, defensive checks that can't fire, comments that restate the code,
    a layer that only forwards calls. Removal you can't argue against is progress you can't regret.
-   → **REQUIRED SUB-SKILL:** Use **subtraction-first** — question every line and feature before you touch it.
+   Apply the **subtraction-first** move directly. Load that skill when removal is the focused
+   problem rather than forcing another skill for every craft pass.
 
 2. **Name.** Rename until the names carry the design. A well-named thing needs no comment; a
    badly-named thing needs a paragraph. If you must explain what something is, you haven't named it yet.
-   → **REQUIRED SUB-SKILL:** Use **naming-as-design** — treat renaming as a design tool, not cosmetics.
+   Apply **naming-as-design** when names expose a fuzzy boundary; load it for a concentrated naming
+   problem, not routine local improvements.
 
 3. **Flatten and order.** Make it read top-down like prose: the important thing first, details
    below, one altitude per function. Collapse needless nesting; return early; let the shape of
    the code match the shape of the idea.
-   → **REQUIRED SUB-SKILL:** Use **reading-like-prose** — structure code for the human who reads it next.
+   Apply **reading-like-prose** when the control flow or ordering obscures intent; load it when that
+   is the dominant problem.
 
 4. **Final read-through.** Read it once, start to finish, as if you'd never seen it. Does it
    flow? Does anything make you stop and squint? The squint is the bug in the *prose*. Fix it.
@@ -64,18 +67,21 @@ work is how one bad cut loses good work.
 
 ## Parallelize With Care
 
-Craft work fans out — but whittling *edits* code, and concurrent edits race. Split the modes:
+Craft work can fan out when the host permits it and the benefit outweighs coordination cost — but
+whittling *edits* code, and concurrent edits race. Split the modes:
 
-- **Analysis fans out freely.** Surveying many files for what to subtract, hunting weak names,
-  spotting staircases — delegate these read-only sweeps and keep only the findings.
-- **Verification loves independent skeptics.** Confirm behavior is unchanged by dispatching agents
-  to run the tests / diff the golden output — and, for a judgment call, to *try to prove* the
-  behavior shifted. Independent lenses catch a regression a single self-check rationalizes past.
+- **Analysis may fan out when permitted.** Surveying many files for what to subtract, hunting weak
+  names, spotting staircases — delegate these read-only sweeps when useful and keep only the
+  findings.
+- **Prefer independent skeptics when available.** Confirm behavior is unchanged with a fresh
+  reviewer, second model, or separate verification context. If none exists, run an explicit
+  adversarial self-check and state that limitation.
 - **Edits stay isolated.** Never let two agents carve the same tree at once. Partition by file so no
   two overlap, or give each its own worktree. When unsure, serialize the writing.
 
-→ **REQUIRED SUB-SKILLS:** **dispatching-subagents** for the fan-out rules and host budget;
-**using-worktrees** for isolating any parallel edits.
+→ **CONDITIONAL SUB-SKILLS:** Use **dispatching-subagents** only when permitted fan-out materially
+helps. Use **using-worktrees** only for permitted concurrent edits or a risky experiment. When
+either capability is unavailable, serialize the work in the current workspace.
 
 ## Restraint
 

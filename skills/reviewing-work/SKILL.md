@@ -12,18 +12,23 @@ Review **early and often** (per meaningful chunk, not just at the end), get it f
 *doesn't share your assumptions*, and engage the feedback as a technical evaluation, not a social
 one. Two halves: **getting** the review, and **receiving** it well.
 
-## Getting a Review — Use Fresh Context
+## Getting a Review — Prefer Fresh Context
 
-The reviewer must not inherit your session's history and rationalizations. Give it exactly what it
-needs, constructed on purpose:
+Use the freshest review mechanism the host and active policy permit. Give it exactly what it needs,
+constructed on purpose:
 
 - **A fresh reviewer subagent** (**dispatching-subagents**) with a crafted brief: the diff range
   (base…head), what the change is meant to do, the requirements/constraints it must meet, and "return
   severity-ranked findings." It keeps the diff in *its* context; only the findings come back to you.
 - **Or an independent model** — **consulting-codex** in review or challenge mode for a second opinion.
+- **Or a mechanical review command** supplied by the host, such as `/code-review`.
+- **Fallback:** when none of those capabilities exists, start a deliberate adversarial self-review:
+  re-read the requirements, inspect the complete diff from the base, trace affected callers, and
+  try to construct a failing case. State that the review was not independent.
 
-Mandatory after each task in a fan-out, after a major feature, and before anything merges. "It's
-simple" is not a reason to skip — simple changes carry the bugs you stopped looking for.
+Run a review after each task in a fan-out, after a major feature, and before anything merges. Prefer
+independent context, but do not block solely because the host lacks it. "It's simple" is not a
+reason to skip the review pass — simple changes carry the bugs you stopped looking for.
 
 ## Receiving a Review — Technical, Not Emotional
 
@@ -57,7 +62,8 @@ scoped re-review of just those changes.
 
 ## Common Mistakes
 
-- **Reviewing with your own warm context.** You'll rubber-stamp your own reasoning. Use a fresh reviewer.
+- **Pretending self-review is independent.** Prefer fresh context; when forced to self-review,
+  label the limitation and use an explicit adversarial checklist.
 - **Performative agreement.** "You're so right!" then a wrong fix. Verify, then state what you're doing.
 - **Applying external feedback blindly.** Wrong-for-this-codebase advice sounds authoritative. Check it against reality.
 - **Batch-implementing unclear items.** Clarify everything first; related items fixed in isolation collide.

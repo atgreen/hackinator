@@ -1,7 +1,7 @@
 # Skill evals
 
 Evals are the source of truth for whether a skill routes and behaves as intended. Hackinator
-currently has 18 cases covering 14 of its 20 skills; `scripts/check-evals.py` reports the gaps.
+currently has 25 cases covering 16 of its 20 skills; `scripts/check-evals.py` reports the gaps.
 
 Each behavioral run compares two fresh workspaces:
 
@@ -88,8 +88,8 @@ case; the default is three trials. The runner prints the model-turn count before
 cases x trials x 2 conditions = model turns
 ```
 
-Those turns may incur API charges. A full run of the current 18 cases at the default trial count is
-108 model turns. Each condition gets a new temporary workspace. Claude runs in `--bare` mode and
+Those turns may incur API charges. A full run of the current 25 cases at the default trial count is
+150 model turns. Each condition gets a new temporary workspace. Claude runs in `--bare` mode and
 loads this repository as a plugin only for the candidate. Each Codex trial uses an isolated
 `CODEX_HOME` containing only a link to the existing authentication file. The runner ignores user
 config and execution-policy rules, disables plugins and discovered user/admin skills, disables all

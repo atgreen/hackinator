@@ -1,6 +1,6 @@
 ---
 name: using-worktrees
-description: Use when parallel agents or experiments need to edit files without racing each other, when you want a throwaway branch you can build in and discard, or when the words "worktree", "isolation", or "keep main clean" come up
+description: Isolates permitted concurrent edits or risky experiments in separate Git working directories. Use when agents may race, a throwaway branch is needed, or the user says "worktree", "isolation", or "keep main clean". Not for deciding whether to parallelize — that's dispatching-subagents
 ---
 
 # Using Worktrees
@@ -14,6 +14,9 @@ risky experiment lives somewhere you can delete without touching your main check
 
 This is the isolation that makes **parallel *writing*** safe. Parallel *reading* never needs it —
 see **dispatching-subagents**.
+
+Use a worktree only when active policy permits creating one. If the host lacks worktree isolation
+or forbids it, preserve unrelated changes and serialize writes in the current workspace.
 
 ## When to Reach for One
 
@@ -38,10 +41,10 @@ git rev-parse --show-superproject-working-tree 2>/dev/null
 
 Already in a linked worktree (and not a submodule)? **Skip creation — work where you are.**
 
-## Prefer the Harness's Built-In Isolation
+## Prefer Permitted Built-In Isolation
 
-If you're dispatching a subagent that will edit files, let the runtime make and clean up the
-worktree for you — no git commands, no orphans:
+If you're permitted to dispatch a subagent that will edit files, let the runtime make and clean up
+the worktree for you — no git commands, no orphans:
 
 - **Agent tool:** pass `isolation: "worktree"`. The agent runs in a fresh worktree, auto-removed if unchanged.
 - **Workflow steps:** pass `isolation: 'worktree'` on the agent call — exactly when parallel stages mutate files.
@@ -51,12 +54,14 @@ worktree add` when a native tool exists creates phantom state the harness can't 
 the single most common worktree mistake. Reach for the flag first; drive git by hand only when you
 need a worktree *yourself* (outside an agent) or the runtime offers no isolation.
 
-## Driving It by Hand
+## Driving It by Hand When Authorized
 
 ```bash
 # Pick a location the repo ignores, so worktree contents never get committed.
-# Default to .worktrees/ at the project root; verify it's ignored first:
-git check-ignore -q .worktrees || { echo ".worktrees/" >> .gitignore; git add .gitignore && git commit -m "ignore worktrees"; }
+# Prefer .worktrees/ at the project root; verify it is ignored first:
+git check-ignore -q .worktrees
+# If it is not ignored, follow repository policy to add the ignore entry or choose an existing
+# ignored location. Do not edit .gitignore or commit merely because this recipe says so.
 
 # Create a worktree on a NEW branch
 git worktree add .worktrees/spike-idea -b spike/idea
@@ -74,14 +79,16 @@ git worktree prune                     # tidy metadata after any manual deletion
 blocked worktree creation and work in the current directory instead — serialize the writes rather
 than isolating them.
 
-To **keep** the work: commit on its branch, then merge or cherry-pick back into main. To **discard**
-it: `git worktree remove` and the unmerged branch simply evaporates.
+To **keep** the work: when commit/integration authority exists, commit on its branch, then merge or
+cherry-pick as authorized. To **discard** it, require explicit discard intent before removing the
+worktree or deleting an unmerged branch.
 
 ## Start From a Clean Baseline
 
-A fresh worktree should build and pass tests *before* you change anything — otherwise every later
-failure is ambiguous. Install deps (`npm install` / `cargo build` / `pip install` / as the project
-needs) and run the test suite once. If the baseline is already red, report it before proceeding.
+A fresh worktree should run a proportionate baseline check *before* you change anything — otherwise
+every later failure is ambiguous. Use the repository-prescribed gate when one exists; for a small
+bounded change, run the focused build/tests that distinguish a pre-existing failure. If the
+baseline is already red, report it before proceeding.
 
 ## Cleanup Is Not Optional
 
@@ -99,13 +106,14 @@ is abandoned. The built-in isolation flag does this for you — one more reason 
 | "Obviously not in a worktree, no need to check" | Run Step 0. Harness isolation and submodules both fool eyeballing. |
 | "`git worktree add` is quicker than finding the native tool" | The native flag owns placement, branching, and cleanup. Bypassing it leaves phantom state. |
 | "The worktree dir is surely ignored" | Run `git check-ignore`. An unignored worktree commits the whole tree into the repo. |
-| "Baseline tests can wait" | A dirty baseline makes every later failure ambiguous. Run them first. |
+| "Baseline tests can wait" | A dirty baseline makes later failures ambiguous. Run the relevant baseline first. |
 | "I'll `rm -rf` the folder when done" | Use `git worktree remove` — a hand-deleted folder leaves stale metadata. |
 
 ## Gotchas
 
 - **One branch, one worktree.** Git won't check out the same branch in two worktrees at once.
-- **Uncommitted work is lost on remove.** Commit first if you want to keep it.
+- **Uncommitted work is lost on remove.** Do not remove it until the work is preserved through an
+  authorized commit, patch, or other recovery path.
 - **Disk cost is real** on large repos — another reason worktrees are for genuine write-conflicts, not read-only fan-out.
 
 ## Relationship to Other Skills

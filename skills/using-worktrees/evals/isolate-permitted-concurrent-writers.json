@@ -1,0 +1,11 @@
+{
+  "skills": ["using-worktrees"],
+  "query": "Two permitted agents need to edit overlapping files in parallel in this Git repository. Use the host's native worktree isolation so they cannot race.",
+  "expected_behavior": [
+    "Selects using-worktrees because permitted concurrent writers need filesystem isolation",
+    "Prefers host-native isolation over manually creating unmanaged worktrees",
+    "Keeps each writer in a separate tree and plans safe cleanup"
+  ],
+  "should_not_select": ["builder", "shaping"],
+  "allowed_skills": ["using-worktrees", "dispatching-subagents"]
+}

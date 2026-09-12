@@ -1,6 +1,6 @@
 ---
 name: dispatching-subagents
-description: Use when work can be split across subagents or parallel tool calls — fan-out search, independent build/spike/review tasks, adversarial verification — or when deciding how many things to run at once without overwhelming the host or ballooning total runtime
+description: Chooses whether and how widely to parallelize permitted work. Use for fan-out search, independent build/spike/review tasks, adversarial verification, or host-budget decisions. Not for isolating writers after parallelism is chosen — that's using-worktrees
 ---
 
 # Dispatching Subagents
@@ -11,6 +11,10 @@ description: Use when work can be split across subagents or parallel tool calls 
 as a **budget**, not an infinite pool. The goal is *lower wall-clock*, not *maximum concurrency*.
 Ten agents that make the machine swap are slower than three that don't.
 
+First check the authority and capability boundary. This skill never grants permission to spawn an
+agent. If the host or active instructions forbid subagents, use batched read-only tool calls where
+available or execute the same dependency order serially.
+
 Two wins from delegating, and they're different:
 
 - **Parallelism** — independent work runs at once, so wall-clock ≈ the slowest chain, not the sum.
@@ -18,6 +22,8 @@ Two wins from delegating, and they're different:
   never enter your context. Reach for this even when you *don't* need speed.
 
 ## Reach for a Subagent When
+
+Only after the host permits subagents:
 
 - **Fan-out search / exploration** — "where is X handled", sweeping many files or naming conventions. Delegate; keep the conclusion, not the excerpts.
 - **Independent tasks** — spikes of two rival approaches, reviewing N files, building M targets — anything with no ordering dependency between the pieces.
@@ -48,7 +54,7 @@ Classify every unit of work before deciding how wide to go:
 **Heuristic:** heavy jobs concurrent ≤ `nproc − 2`; cheap agents a flat ~5–8. When mixing, the
 heavy class sets the limit — a single build can saturate the machine on its own.
 
-## Before a Wide Fan-Out
+## Before a Permitted Wide Fan-Out
 
 1. **Scout first.** Send *one* agent (or one check) to confirm the approach before launching
    twelve down the same dead end. Cheap insurance against expensive mistakes.
@@ -76,11 +82,12 @@ summary, check the changes don't conflict, and run the full suite once to confir
 ## Parallel *Edits* Need Isolation
 
 Read-only fan-out is safe. **Concurrent edits are not** — two agents writing the same tree race and
-corrupt each other. If parallel tasks mutate files, give each its own worktree, or partition so no
-two touch the same file. When in doubt, parallelize the *reading/analysis* and serialize the *writing*.
+corrupt each other. If permitted parallel tasks mutate files, use host-provided isolation, separate
+worktrees, or a partition proven not to overlap. If isolation is unavailable or forbidden,
+parallelize the *reading/analysis* and serialize the *writing*.
 
-→ **REQUIRED SUB-SKILL:** Use **using-worktrees** for the isolation mechanics — including the
-harness's built-in `isolation: "worktree"` flag, which creates and cleans up the worktree for you.
+→ **CONDITIONAL SUB-SKILL:** Use **using-worktrees** when permitted concurrent writers actually
+need isolation. Do not load it for read-only fan-out or a serial fallback.
 
 ## Common Mistakes
 
@@ -89,3 +96,5 @@ harness's built-in `isolation: "worktree"` flag, which creates and cleans up the
 - **Fanning out before the approach is proven.** Scout with one, then widen.
 - **Delegating a dependent step, then blocking on it.** No parallelism gained — just dispatch overhead.
 - **Maximizing agent count.** Wall-clock is set by the slowest chain and the host's limits, not by how many agents you launched.
+- **Treating this skill as spawn authority.** Host and active instructions decide whether subagents
+  exist and may be used; this skill only decides whether they would help.

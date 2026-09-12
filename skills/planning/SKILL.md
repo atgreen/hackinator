@@ -7,9 +7,9 @@ description: Use after a design is approved and before implementing anything arc
 
 ## Overview
 
-**Core principle:** Write the plan for someone with **zero context, questionable taste, and no
-instinct to test** — because that someone is a fresh subagent, or you after compaction, or you at
-2am. Everything the implementer needs is *in the plan*; nothing lives only in your head or the chat.
+**Core principle:** Write the plan for an implementer with **zero context, questionable taste, and
+no instinct to test** — whether that is a fresh subagent, you after compaction, or you at 2am.
+Everything the implementer needs is *in the plan*; nothing lives only in your head or the chat.
 
 A good plan turns a design into a sequence of tasks that each end in something you can *run and
 check*. It is the bridge between **shaping** (what & why) and the build (how).
@@ -47,9 +47,10 @@ bd create "Parser: tokenize input" -t task -p 1
 bd create "Parser: build AST"      -t task -p 1 --deps blocked-by:<tokenize-id>
 ```
 
-Record dependencies so `bd ready` surfaces exactly what's buildable next. This is what lets a
-fan-out of implementers (**dispatching-subagents**) each claim ready work without colliding. For a
-larger effort, also keep a short plan note in the repo; for most work, the beads *are* the plan.
+Record dependencies so `bd ready` surfaces exactly what's buildable next. The same graph supports
+one inline implementer or, when the host permits and tasks are independent, a fan-out of
+implementers (**dispatching-subagents**) without collisions. For a larger effort, also keep a short
+plan note in the repo; for most work, the beads *are* the plan.
 
 ## Self-Review Before Handing Off
 
@@ -58,8 +59,9 @@ Check the plan against the approved design:
 - **No placeholders** — every task is concrete enough to implement blind.
 - **Interfaces line up** — what one task produces is what the next consumes, names and shapes matching.
 
-Then pick the execution mode: fan out fresh implementers per ready task (**dispatching-subagents**,
-default for independent tasks) or work them inline.
+Then pick an execution mode the host permits. Fan out fresh implementers only when independent work
+and saved wall-clock justify it (**dispatching-subagents**); otherwise work the dependency order
+inline. The plan must be equally actionable in either mode.
 
 ## Common Mistakes
 

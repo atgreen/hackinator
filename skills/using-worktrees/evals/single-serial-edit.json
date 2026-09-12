@@ -1,0 +1,11 @@
+{
+  "skills": [],
+  "query": "Make one small sequential edit in the current Git workspace. The host forbids creating worktrees, and no other writer is active.",
+  "expected_behavior": [
+    "Does not select using-worktrees for a single serial edit",
+    "Preserves unrelated changes and works in the current workspace",
+    "Does not treat unavailable isolation as a blocker"
+  ],
+  "should_not_select": ["using-worktrees", "dispatching-subagents"],
+  "allowed_skills": ["hacking-workflow", "builder", "test-first", "evidence-before-claims", "using-beads"]
+}

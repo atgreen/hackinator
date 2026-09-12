@@ -1,0 +1,11 @@
+{
+  "skills": ["dispatching-subagents"],
+  "query": "These three investigations are independent, but the active host policy forbids spawning subagents. Explain the execution mode you will use.",
+  "expected_behavior": [
+    "Treats host policy as authoritative rather than spawning because the skill recommends fan-out",
+    "Uses batched read-only tool calls when available or works the investigations serially",
+    "Does not create worktrees when no concurrent writers exist"
+  ],
+  "should_not_select": ["using-worktrees"],
+  "allowed_skills": ["dispatching-subagents"]
+}
