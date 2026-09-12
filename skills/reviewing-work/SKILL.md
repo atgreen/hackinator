@@ -17,7 +17,7 @@ one. Two halves: **getting** the review, and **receiving** it well.
 Use the freshest review mechanism the host and active policy permit. Give it exactly what it needs,
 constructed on purpose:
 
-- **A fresh reviewer subagent** (**dispatching-subagents**) with a crafted brief: the diff range
+- **When available, a fresh reviewer subagent** (**dispatching-subagents**) with a crafted brief: the diff range
   (base…head), what the change is meant to do, the requirements/constraints it must meet, and "return
   severity-ranked findings." It keeps the diff in *its* context; only the findings come back to you.
 - **Or an independent model** — **consulting-codex** in review or challenge mode for a second opinion.

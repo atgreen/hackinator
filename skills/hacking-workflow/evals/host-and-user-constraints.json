@@ -6,6 +6,17 @@
     "Continues inline in the current workspace instead of blocking on forbidden capabilities",
     "Uses proportionate verification without claiming authority to commit or push"
   ],
-  "should_not_select": ["shaping", "dispatching-subagents", "using-worktrees", "finishing"],
-  "allowed_skills": ["hacking-workflow"]
+  "should_not_select": ["shaping", "dispatching-subagents", "using-worktrees"],
+  "allowed_skills": [
+    "hacking-workflow",
+    "using-hackinator",
+    "planning",
+    "builder",
+    "whittler",
+    "test-first",
+    "evidence-before-claims",
+    "reviewing-work",
+    "finishing",
+    "using-beads"
+  ]
 }
