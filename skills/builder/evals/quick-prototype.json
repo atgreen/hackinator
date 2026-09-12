@@ -1,10 +1,15 @@
 {
   "skills": ["builder"],
-  "query": "Just hack together a quick prototype that scrapes the page and prints the titles.",
+  "query": "Hack together a quick prototype in scraper.py that parses this literal HTML and prints the title plus all h1 and h2 text: <html><title>Example</title><body><h1>Hello</h1><h2>News</h2></body></html>. Use only the Python standard library and run it once.",
   "expected_behavior": [
     "Selects builder — making something real from scratch, fast",
-    "Biases toward a running artifact over a finished argument",
+    "Creates and runs a scraper.py that prints Example, Hello, and News",
     "Does not start polishing or refactoring code that does not exist yet"
   ],
-  "should_not_select": ["whittler", "shaping"]
+  "should_not_select": ["whittler", "shaping"],
+  "workspace_write": true,
+  "graders": [
+    {"type": "file_exists", "path": "scraper.py"},
+    {"type": "command", "argv": ["python3", "scraper.py"], "expected_exit": 0}
+  ]
 }

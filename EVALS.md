@@ -1,51 +1,102 @@
 # Skill evals
 
-Evals are the **source of truth** for whether a skill works — not the prose in its `SKILL.md`.
-Anthropic and LangChain both report that skill *invocation* is unreliable (~70%) and degrades to
-**wrong-skill selection** once a suite passes ~20 skills. This suite has 21. So most of our evals
-test the boundary: given a realistic prompt, does the *right* skill fire and the sibling stay quiet?
+Evals are the source of truth for whether a skill routes and behaves as intended. Hackinator
+currently has 10 cases covering 10 of its 20 skills; `scripts/check-evals.py` reports the gaps.
 
-## Where they live
+Each behavioral run compares two fresh workspaces:
 
-One `evals/` directory per skill, holding one or more `.json` cases:
+- `baseline`: the agent answers with skill instructions disabled.
+- `skills`: the same agent and query run with this repository's skills available.
 
-```
+Repeated pairs expose routing variance. The report preserves the prompt, expected-behavior rubric,
+selection results, deterministic grades, requested/observed model identifiers, CLI version, git
+revision, tokens, timing, and any cost reported by the harness.
+
+## Where cases live
+
+Put JSON cases under the skill they primarily exercise:
+
+```text
 skills/<name>/evals/<case>.json
 ```
 
-`writing-skills` requires recording a case whenever you author or change a skill (step 4 of
-"Write the Failing Case First").
+`writing-skills` requires a case whenever a skill is authored or changed. Prefer realistic boundary
+prompts where a sibling skill is plausible; easy prompts reveal little about routing quality.
 
 ## Case format
 
 ```json
 {
-  "skills": ["shaping"],
-  "query": "the prompt a user would actually type",
+  "skills": ["builder"],
+  "query": "Hack together a scraper that prints page titles.",
   "expected_behavior": [
-    "an observable thing the agent should do",
-    "another observable thing"
+    "Produces a runnable thin slice",
+    "Does not polish code that does not exist yet"
   ],
-  "should_not_select": ["planning", "builder"]
+  "should_not_select": ["whittler", "shaping"],
+  "workspace_write": true,
+  "graders": [
+    {"type": "file_exists", "path": "scraper.py"},
+    {"type": "command", "argv": ["python3", "scraper.py"], "expected_exit": 0},
+    {"type": "output_contains", "value": "title"},
+    {"type": "output_regex", "pattern": "tests? pass"}
+  ]
 }
 ```
 
 | Field | Required | Meaning |
-|---|---|---|
-| `skills` | yes | The skill(s) that should be selected for `query`. |
-| `query` | yes | A realistic user prompt, ideally at a boundary with a sibling. |
-| `expected_behavior` | yes | Observable outcomes — selection *and* what the skill should make the agent do. |
-| `should_not_select` | no | Sibling skills that must **not** fire. This is the disambiguation assertion. |
+|---|---:|---|
+| `skills` | yes | Skills the candidate run must select. May be empty for a negative-routing case whose `should_not_select` is non-empty. |
+| `query` | yes | The user prompt sent unchanged to both conditions. |
+| `expected_behavior` | yes | Human-review rubric included in the report; it is not automatically LLM-judged. |
+| `should_not_select` | no | Skills that both conditions must avoid. |
+| `workspace_write` | no | Requests a writable Codex sandbox; defaults to `false`. |
+| `graders` | no | Deterministic assertions evaluated inside the temporary trial workspace. |
 
-Keep queries concrete and language-agnostic. Prefer a boundary case (where a sibling is plausible)
-over an easy one — easy cases don't test the description.
+Output checks are case-insensitive. Regular expressions use Python syntax and case-insensitive
+matching. File paths must be relative and cannot escape the trial workspace. Command graders take
+an argument vector, never a shell string; `expected_exit` defaults to `0` and `timeout` to 60
+seconds.
 
-## Running them
+## Validate cases
 
-There is no built-in runner (Anthropic's guidance). Two ways to run:
+Schema validation is local, deterministic, and free:
 
-- **Deterministic check** — `python3 scripts/check-evals.py` validates every case's schema and
-  reports which skills still lack evals. Run it before committing skill changes.
-- **Behavioral check (manual)** — give a *fresh* agent the `query` with the skill suite loaded and
-  watch: did it select `skills`, avoid `should_not_select`, and produce `expected_behavior`? Compare
-  against a baseline run with no skills loaded. Automating this with an LLM judge is a future bead.
+```bash
+python3 scripts/check-evals.py
+python3 scripts/run_evals.py --list
+```
+
+## Run paired evaluations
+
+Both harnesses require an installed, authenticated CLI. Start with one case and one trial:
+
+```bash
+python3 scripts/run_evals.py \
+  --harness codex \
+  --case quick-prototype \
+  --trials 1 \
+  --output eval-results/quick-prototype-codex.json
+```
+
+Use `--harness claude` for Claude Code and `--model` to pin a model. Omitting `--case` runs every
+case; the default is three trials. The runner prints the model-turn count before starting:
+
+```text
+cases x trials x 2 conditions = model turns
+```
+
+Those turns may incur API charges. A full run of the current 10 cases at the default trial count is
+60 model turns. Each condition gets a new temporary workspace. Claude runs in `--bare` mode and
+loads this repository as a plugin only for the candidate. Codex ignores user config and rules,
+disables plugins, disables skill instructions for the baseline, and stages this repository's skills
+under the candidate workspace.
+
+Reports default to `eval-results/<UTC timestamp>-<harness>.json`. Raw client events can be large and
+may contain incidental environment details, so they are omitted unless `--include-events` is set.
+The command exits nonzero for harness errors or failed candidate grades. Baseline behavior graders
+are still recorded but do not make the experiment fail—the comparison is their purpose.
+
+Commit deliberately chosen result artifacts when they support a skill change or release. Treat
+model, CLI, repository revision, and trial count as part of the result; scores without that context
+are not comparable.

@@ -12,6 +12,11 @@ import json
 import sys
 from pathlib import Path
 
+try:
+    from scripts.run_evals import EvalCase
+except ModuleNotFoundError:  # Direct execution puts scripts/ first on sys.path.
+    from run_evals import EvalCase
+
 SKILLS_DIR = Path(__file__).resolve().parent.parent / "skills"
 
 
@@ -31,28 +36,21 @@ def check_case(path, known):
         bad(f"invalid JSON ({e})")
         return errs
 
+    try:
+        EvalCase.from_dict(data, source=str(path))
+    except ValueError as e:
+        errs.append(str(e))
+        return errs
+
     skills = data.get("skills")
-    if not isinstance(skills, list) or not skills:
-        bad("'skills' must be a non-empty list")
-    else:
-        for s in skills:
-            if s not in known:
-                bad(f"'skills' names unknown skill '{s}'")
-
-    if not isinstance(data.get("query"), str) or not data.get("query", "").strip():
-        bad("'query' must be a non-empty string")
-
-    beh = data.get("expected_behavior")
-    if not isinstance(beh, list) or not beh:
-        bad("'expected_behavior' must be a non-empty list")
+    for s in skills:
+        if s not in known:
+            bad(f"'skills' names unknown skill '{s}'")
 
     sns = data.get("should_not_select", [])
-    if not isinstance(sns, list):
-        bad("'should_not_select' must be a list")
-    else:
-        for s in sns:
-            if s not in known:
-                bad(f"'should_not_select' names unknown skill '{s}'")
+    for s in sns:
+        if s not in known:
+            bad(f"'should_not_select' names unknown skill '{s}'")
     return errs
 
 

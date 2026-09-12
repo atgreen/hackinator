@@ -77,6 +77,13 @@ The skills are written harness-neutral and degrade gracefully where runtimes dif
 - **Beads everywhere** — `bd` is an external CLI, so `using-beads` and the workflow's tracking work
   identically in any harness. Repo-level agent instructions live in both `CLAUDE.md` and `AGENTS.md`.
 
+## Evaluations
+
+`python3 scripts/check-evals.py` validates the case corpus without calling a model.
+`python3 scripts/run_evals.py --list` shows the available cases, and the paired runner compares
+fresh baseline and skill-enabled Claude Code or Codex turns. See [EVALS.md](EVALS.md) for the case
+schema, deterministic graders, cost controls, and report format.
+
 ## The ethic
 
 - Hands-on: you understand a system by building with it.
