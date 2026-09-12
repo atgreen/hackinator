@@ -1,0 +1,12 @@
+{
+  "skills": ["using-hackinator"],
+  "query": "Explain how Hackinator should behave when I have already approved a clear implementation, the host forbids subagents, and repository policy says not to commit or push.",
+  "expected_behavior": [
+    "States that active system, user, host, and repository policy outranks skill guidance",
+    "Does not require another shaping approval for an already-approved clear implementation",
+    "Uses an inline or serial fallback instead of blocking on unavailable subagents or worktrees",
+    "Does not claim authority to commit, sync, or push"
+  ],
+  "should_not_select": ["shaping", "dispatching-subagents", "using-worktrees", "finishing"],
+  "allowed_skills": ["using-hackinator"]
+}

@@ -1,5 +1,22 @@
 # Agent Instructions
 
+## Authority and adaptation
+
+Hackinator skills guide technique; they do not grant permissions or outrank active system, user,
+host, or repository policy.
+
+- Continue autonomously on reversible, in-scope work when the goal is clear. Ask when a missing
+  choice would materially change the result, or before destructive, externally visible,
+  security-sensitive, or paid actions that lack authority.
+- An explicit request to implement a clear, bounded change supplies implementation intent; do not
+  manufacture another approval gate. Commit, sync, and push only when active policy or the user
+  authorizes them.
+- Use subagents, worktrees, and independent reviewers when the host supports them and the benefit
+  justifies the cost. Serial work, the current workspace, and adversarial self-review are valid
+  fallbacks.
+- Match verification breadth to risk while working, then run fresh, relevant evidence before
+  claiming success or landing a change.
+
 This project uses **bd** (beads) for issue tracking. Run `bd prime` for full workflow context.
 
 > **Architecture in one line:** Issues live in a local Dolt database

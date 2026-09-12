@@ -16,11 +16,15 @@ correctness. Build first, then reveal the simple thing hiding inside what you bu
 
 ## The Ethic (what these skills assume)
 
+Skills advise *how* to work. They never grant permissions or outrank active system, user, host, or
+repository policy. Apply every technique inside those boundaries.
+
 - **Hands-on imperative.** You understand a system by building with it, not by reading about it.
 - **Beauty is functional.** Elegant code is easier to trust, change, and love. Ugliness is a smell.
 - **Subtraction is progress.** The best hack removes more than it adds.
 - **Ship something that runs.** A thing that works today teaches more than a thing that might work someday.
-- **Delegate, don't drown.** Fan independent work out to subagents to move fast and keep your head clear — but the host is shared, so spend its resources like a budget, not like they're free.
+- **Adapt to the host.** Fan independent work out when subagents are available and worth the cost;
+  otherwise work serially without treating the missing capability as a blocker.
 - **Track it in the open.** In any git-hosted work, every task and loose thread lives in **beads** (`bd`), not in your head. A thought you don't file is a thought you'll lose.
 - **Two heads beat one on hard problems.** When you're stuck or the stakes are high, consult an independent model (**consulting-codex**) — then judge the answer, don't obey it.
 - **Play.** If it isn't a little bit fun, you're doing it wrong.
@@ -28,7 +32,7 @@ correctness. Build first, then reveal the simple thing hiding inside what you bu
 ## The Workflow (the front door for any non-trivial build)
 
 For real work — anything past a quick edit — start with **hacking-workflow**. It sequences the whole
-loop and enforces the human-approval gates, right-sizing the ceremony (a spike skips most of it):
+loop and right-sizes decisions and ceremony to the work (a spike skips most of it):
 
 ```
 shape → isolate → plan → build → craft → verify → review → finish
@@ -36,14 +40,14 @@ shape → isolate → plan → build → craft → verify → review → finish
 
 | Phase | Skill | In one line |
 |---|---|---|
-| Shape | **shaping** | Understand + get buy-in **before** any code (the approval gate) |
-| Isolate | **using-worktrees** | A clean workspace so nothing races or leaks onto main |
+| Shape | **shaping** | Resolve intent and consequential ambiguity before code |
+| Isolate | **using-worktrees** | Isolate edits when policy, capability, and collision risk call for it |
 | Plan | **planning** | Map files + right-sized tasks, filed as beads |
 | Build | **builder** / **test-first** | Make it work; keeper code is test-first |
 | Craft | **whittler** | Make it elegant, behavior-preserving |
 | Verify | **evidence-before-claims** | No "done" without fresh command output |
-| Review | **reviewing-work** | Fresh reviewer subagent; handle feedback technically |
-| Finish | **finishing** | Land it the way the human chooses; clean up |
+| Review | **reviewing-work** | Use the best available independent check, with a self-review fallback |
+| Finish | **finishing** | Follow the authorized landing choice; clean up |
 
 Track the whole thing in beads throughout (**using-beads**).
 
@@ -65,15 +69,15 @@ Personas are entry points. They lean on the shared techniques below and will pul
 | **subtraction-first** | Improving code — the instinct to add when removing is the better move |
 | **naming-as-design** | Something feels tangled — names that hide the design vs. names that reveal it |
 | **reading-like-prose** | Making code a joy to read — structuring for the human who reads it next |
-| **dispatching-subagents** | Splitting work across subagents or parallel calls — fan-out, rival spikes, multi-file review — without overwhelming the host |
-| **using-worktrees** | Isolating parallel *edits* so agents don't race — via the harness's built-in isolation or `git worktree` by hand |
+| **dispatching-subagents** | Splitting work across permitted subagents or parallel calls when doing so materially helps |
+| **using-worktrees** | Isolating parallel or risky edits when the host and repository permit it |
 | **using-beads** | Tracking work in `bd` — always, in any git-hosted activity: tasks, deferred TODOs, discovered bugs, dependencies |
 | **consulting-codex** | Getting an independent second opinion, adversarial gut-check, or outside diff review from the Codex CLI when stuck or the stakes are high |
 
 ## How to Choose
 
 ```
-Non-trivial build or change? → hacking-workflow (runs the whole loop with gates)
+Non-trivial build or change? → hacking-workflow (runs the authority-aware loop)
 Nothing runs yet?            → builder  (which starts with walking-skeleton)
 It runs but it's ugly?       → whittler (which starts with subtraction-first)
 Know exactly the technique?  → invoke the technique/process skill directly

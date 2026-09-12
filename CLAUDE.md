@@ -1,12 +1,29 @@
 # hackinator
 
+## Authority and adaptation
+
+Hackinator skills guide technique; they do not grant permissions or outrank active system, user,
+host, or repository policy.
+
+- Continue autonomously on reversible, in-scope work when the goal is clear. Ask when a missing
+  choice would materially change the result, or before destructive, externally visible,
+  security-sensitive, or paid actions that lack authority.
+- An explicit request to implement a clear, bounded change supplies implementation intent; do not
+  manufacture another approval gate. Commit, sync, and push only when active policy or the user
+  authorizes them.
+- Use subagents, worktrees, and independent reviewers when the host supports them and the benefit
+  justifies the cost. Serial work, the current workspace, and adversarial self-review are valid
+  fallbacks.
+- Match verification breadth to risk while working, then run fresh, relevant evidence before
+  claiming success or landing a change.
+
 Personal skills for **hacking in the original sense** — building for the joy of it and making the
 result beautiful. Not security; craft. A hack is a clever, playful, well-made solution.
 
 ## The workflow
 
 For any non-trivial build, **hacking-workflow** is the front door — it runs the loop
-`shape → isolate → plan → build → craft → verify → review → finish` with inviolable human-approval
+`shape → isolate → plan → build → craft → verify → review → finish` with authority-aware decision
 gates, tracked in beads throughout. Process skills: `shaping`, `planning`, `test-first`,
 `evidence-before-claims`, `reviewing-work`, `finishing`.
 
@@ -25,20 +42,21 @@ the host), `using-worktrees` (isolate parallel edits), `using-beads` (track the 
 - **Beads, always.** In any git-hosted activity, track work in `bd` — continuously, not at the end.
   Deferred TODOs, discovered bugs, and follow-ups are beads, not code comments or mental notes. See **using-beads**.
 - **Ask a peer when it's hard.** Stuck or high-stakes? Consult an independent model via **consulting-codex**, then judge its answer.
-- **Mind the host.** Parallelize via subagents, but treat host resources as a budget. See **dispatching-subagents**.
+- **Mind the host.** Use subagents when available and worthwhile, treating host resources as a
+  budget; otherwise work serially. See **dispatching-subagents**.
 
 ## Layout
 
 ```
 skills/
   using-hackinator/   # ethos + router (entry point)
-  hacking-workflow/   # the front-door loop: shape→…→finish, with gates
-  shaping/            # process: understand + approval gate before code
+  hacking-workflow/   # the front-door loop: shape→…→finish, with decision gates
+  shaping/            # process: resolve consequential ambiguity before code
   planning/           # process: design → right-sized tasks, filed as beads
   test-first/         # process: keeper code gets a failing test first (spikes exempt)
   evidence-before-claims/ # process: no "done" without fresh verification output
-  reviewing-work/     # process: fresh reviewer subagent + receiving feedback well
-  finishing/          # process: prove green → human picks how it lands → clean up
+  reviewing-work/     # process: available independent review + fallback + feedback
+  finishing/          # process: prove green → follow authorized landing choice → clean up
   builder/            # persona: make it work
   whittler/           # persona: make it beautiful
   walking-skeleton/   # technique

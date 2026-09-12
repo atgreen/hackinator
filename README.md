@@ -16,11 +16,29 @@ For any non-trivial build, **hacking-workflow** is the front door. Say *"let's b
 shape → isolate → plan → build → craft → verify → review → finish
 ```
 
-…with inviolable human-approval gates (what you build, and how it lands) and everything tracked in
-beads. The process skills behind it: **shaping** (understand + approve before code), **planning**
+…with authority-aware decision gates and git-hosted work tracked in beads. The process skills
+behind it: **shaping** (resolve consequential ambiguity before code), **planning**
 (design → tasks → beads), **test-first** (keeper code gets a failing test first; spikes exempt),
-**evidence-before-claims** (no "done" without fresh output), **reviewing-work** (fresh reviewer +
-receiving feedback well), **finishing** (prove green → human picks merge/PR/keep → clean up).
+**evidence-before-claims** (no "done" without fresh output), **reviewing-work** (independent check
+when available + receiving feedback well), **finishing** (prove green → follow the authorized
+landing choice → clean up).
+
+## Authority and adaptation
+
+Hackinator skills guide technique; they do not grant permissions or outrank active system, user,
+host, or repository policy.
+
+- Continue autonomously on reversible, in-scope work when the goal is clear. Ask when a missing
+  choice would materially change the result, or before destructive, externally visible,
+  security-sensitive, or paid actions that lack authority.
+- An explicit request to implement a clear, bounded change supplies implementation intent; do not
+  manufacture another approval gate. Commit, sync, and push only when active policy or the user
+  authorizes them.
+- Use subagents, worktrees, and independent reviewers when the host supports them and the benefit
+  justifies the cost. Serial work, the current workspace, and adversarial self-review are valid
+  fallbacks.
+- Match verification breadth to risk while working, then run fresh, relevant evidence before
+  claiming success or landing a change.
 
 ## Two moods, shared craft
 
@@ -69,9 +87,9 @@ Claude Code can alternatively install it as a plugin:
 
 The skills are written harness-neutral and degrade gracefully where runtimes differ:
 
-- **Subagents and worktree isolation** — `dispatching-subagents` and `using-worktrees` prefer the
-  harness's native isolation when it exists (Claude Code's `isolation: "worktree"` flag); on a
-  runtime without one, the same skills' manual `git worktree` path applies.
+- **Subagents and worktree isolation** — `dispatching-subagents` and `using-worktrees` use native
+  isolation when it is available and useful (such as Claude Code's `isolation: "worktree"` flag),
+  can use a manual `git worktree` when policy permits, and otherwise fall back to serial work.
 - **Second opinions** — `consulting-codex` is symmetric: the point is an *independent* model, not a
   specific CLI. From Claude Code, consult `codex`; from Codex, consult `claude -p`.
 - **Beads everywhere** — `bd` is an external CLI, so `using-beads` and the workflow's tracking work
