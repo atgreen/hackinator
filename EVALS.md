@@ -1,7 +1,7 @@
 # Skill evals
 
 Evals are the source of truth for whether a skill routes and behaves as intended. Hackinator
-currently has 10 cases covering 10 of its 20 skills; `scripts/check-evals.py` reports the gaps.
+currently has 13 cases covering 12 of its 20 skills; `scripts/check-evals.py` reports the gaps.
 
 Each behavioral run compares two fresh workspaces:
 
@@ -34,6 +34,7 @@ prompts where a sibling skill is plausible; easy prompts reveal little about rou
     "Does not polish code that does not exist yet"
   ],
   "should_not_select": ["whittler", "shaping"],
+  "allowed_skills": ["builder", "evidence-before-claims"],
   "workspace_write": true,
   "graders": [
     {"type": "file_exists", "path": "scraper.py"},
@@ -50,6 +51,7 @@ prompts where a sibling skill is plausible; easy prompts reveal little about rou
 | `query` | yes | The user prompt sent unchanged to both conditions. |
 | `expected_behavior` | yes | Human-review rubric included in the report; it is not automatically LLM-judged. |
 | `should_not_select` | no | Skills that both conditions must avoid. |
+| `allowed_skills` | no | Candidate allowlist. When present, any other selection fails `unexpected_skills`. It must include every required skill. |
 | `workspace_write` | no | Requests a writable Codex sandbox; defaults to `false`. |
 | `graders` | no | Deterministic assertions evaluated inside the temporary trial workspace. |
 
@@ -86,16 +88,22 @@ case; the default is three trials. The runner prints the model-turn count before
 cases x trials x 2 conditions = model turns
 ```
 
-Those turns may incur API charges. A full run of the current 10 cases at the default trial count is
-60 model turns. Each condition gets a new temporary workspace. Claude runs in `--bare` mode and
-loads this repository as a plugin only for the candidate. Codex ignores user config and rules,
-disables plugins, disables skill instructions for the baseline, and stages this repository's skills
-under the candidate workspace.
+Those turns may incur API charges. A full run of the current 13 cases at the default trial count is
+78 model turns. Each condition gets a new temporary workspace. Claude runs in `--bare` mode and
+loads this repository as a plugin only for the candidate. Each Codex trial uses an isolated
+`CODEX_HOME` containing only a link to the existing authentication file. The runner ignores user
+config and execution-policy rules, disables plugins and discovered user/admin skills, disables all
+skill instructions for the baseline, and stages this repository's skills under the candidate
+workspace.
 
 Reports default to `eval-results/<UTC timestamp>-<harness>.json`. Raw client events can be large and
 may contain incidental environment details, so they are omitted unless `--include-events` is set.
 The command exits nonzero for harness errors or failed candidate grades. Baseline behavior graders
 are still recorded but do not make the experiment fail—the comparison is their purpose.
+
+Each condition's summary also reports total skill selections, mean selections per run, multi-skill
+runs, and runs that violated an explicit allowlist. Use those metrics to spot cascades even when the
+required skill selected successfully.
 
 Commit deliberately chosen result artifacts when they support a skill change or release. Treat
 model, CLI, repository revision, and trial count as part of the result; scores without that context

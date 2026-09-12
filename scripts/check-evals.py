@@ -51,6 +51,10 @@ def check_case(path, known):
     for s in sns:
         if s not in known:
             bad(f"'should_not_select' names unknown skill '{s}'")
+    allowed = data.get("allowed_skills", [])
+    for s in allowed:
+        if s not in known:
+            bad(f"'allowed_skills' names unknown skill '{s}'")
     return errs
 
 

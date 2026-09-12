@@ -1,0 +1,11 @@
+{
+  "skills": ["using-beads"],
+  "query": "This Git repository uses bd for project tracking. Find the ready work and claim the next issue before we start.",
+  "expected_behavior": [
+    "Selects using-beads because the task explicitly belongs to a Git repository using bd",
+    "Uses bd ready and claims work through the repository's durable tracker",
+    "Does not substitute an ephemeral local plan for the shared issue state"
+  ],
+  "should_not_select": ["planning"],
+  "allowed_skills": ["using-beads"]
+}

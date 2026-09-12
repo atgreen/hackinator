@@ -1,5 +1,6 @@
 import json
 import io
+import importlib.util
 from pathlib import Path
 import subprocess
 import tempfile
@@ -20,6 +21,14 @@ from scripts.run_evals import (
     parse_codex_events,
     run_paired_trials,
 )
+
+
+_CHECK_EVALS_SPEC = importlib.util.spec_from_file_location(
+    "check_evals", Path(__file__).parents[1] / "scripts/check-evals.py"
+)
+check_evals = importlib.util.module_from_spec(_CHECK_EVALS_SPEC)
+assert _CHECK_EVALS_SPEC.loader is not None
+_CHECK_EVALS_SPEC.loader.exec_module(check_evals)
 
 
 class EvalCaseTests(unittest.TestCase):
@@ -63,6 +72,37 @@ class EvalCaseTests(unittest.TestCase):
 
         self.assertTrue(case.workspace_write)
         self.assertEqual(case.graders[0]["type"], "file_exists")
+
+    def test_case_accepts_allowlist_that_contains_required_skills(self):
+        case = EvalCase.from_dict(
+            {
+                **_case_dict("builder"),
+                "allowed_skills": ["builder", "evidence-before-claims"],
+            },
+            source="builder.json",
+        )
+
+        self.assertEqual(
+            case.allowed_skills, ("builder", "evidence-before-claims")
+        )
+
+    def test_case_rejects_allowlist_missing_a_required_skill(self):
+        with self.assertRaisesRegex(ValueError, "must include required skills: builder"):
+            EvalCase.from_dict(
+                {**_case_dict("builder"), "allowed_skills": []},
+                source="builder.json",
+            )
+
+    def test_case_rejects_skill_that_is_both_allowed_and_forbidden(self):
+        with self.assertRaisesRegex(ValueError, "both allowed and forbidden"):
+            EvalCase.from_dict(
+                {
+                    **_case_dict("builder"),
+                    "allowed_skills": ["builder", "whittler"],
+                    "should_not_select": ["whittler"],
+                },
+                source="builder.json",
+            )
 
     def test_case_accepts_negative_routing_boundary(self):
         case = EvalCase.from_dict(
@@ -214,6 +254,42 @@ class HarnessCommandTests(unittest.TestCase):
 
         self.assertIn("workspace-write", command)
 
+    def test_codex_isolates_global_instructions_but_preserves_auth(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            auth_source = root / "real-codex-home/auth.json"
+            auth_source.parent.mkdir()
+            auth_source.write_text("{}")
+            workspace = root / "workspace"
+            workspace.mkdir()
+            harness = CodexHarness(auth_source=auth_source)
+
+            harness.prepare_workspace("baseline", workspace, root)
+            environment = harness.environment(workspace)
+
+            isolated_home = workspace / ".codex-home"
+            self.assertEqual(environment["CODEX_HOME"], str(isolated_home))
+            self.assertEqual(
+                (isolated_home / "auth.json").resolve(), auth_source.resolve()
+            )
+            self.assertFalse((isolated_home / "AGENTS.md").exists())
+
+    def test_codex_disables_discovered_user_skills(self):
+        external_skill = Path("/home/test/.agents/skills/unrelated/SKILL.md")
+        harness = CodexHarness(external_skill_paths=(external_skill,))
+
+        command = harness.command(
+            _case(), "skills", Path("/tmp/eval"), Path("/repo")
+        )
+
+        override = next(
+            argument
+            for argument in command
+            if argument.startswith("skills.config=[{")
+        )
+        self.assertIn(str(external_skill), override)
+        self.assertIn("enabled = false", override)
+
 
 class TrialExecutionTests(unittest.TestCase):
     def test_runs_repeated_pairs_and_stages_skills_for_codex(self):
@@ -291,6 +367,23 @@ class GradingTests(unittest.TestCase):
         by_name = {grade.name: grade for grade in grades}
         self.assertTrue(by_name["expected_skills"].passed)
         self.assertTrue(by_name["excluded_skills"].passed)
+
+    def test_candidate_grades_selections_outside_an_explicit_allowlist(self):
+        case = EvalCase.from_dict(
+            {**_case_dict("builder"), "allowed_skills": ["builder"]},
+            source="builder.json",
+        )
+
+        grades = grade_trial(
+            case,
+            "skills",
+            AgentResult(selected_skills=("builder", "walking-skeleton")),
+            Path("/tmp"),
+        )
+
+        grade = next(grade for grade in grades if grade.name == "unexpected_skills")
+        self.assertFalse(grade.passed)
+        self.assertIn("walking-skeleton", grade.detail)
 
     def test_baseline_does_not_require_candidate_skill_selection(self):
         grades = grade_trial(
@@ -383,6 +476,36 @@ class ReportTests(unittest.TestCase):
         )
         self.assertEqual(report["cases"][0]["expected_behavior"], ["Produces a runnable artifact"])
 
+    def test_report_summarizes_selectivity_and_cascades(self):
+        case = EvalCase.from_dict(
+            {**_case_dict("builder"), "allowed_skills": ["builder"]},
+            source="builder.json",
+        )
+        result = AgentResult(selected_skills=("builder", "walking-skeleton"))
+        records = [
+            TrialRecord(
+                "builder",
+                "skills",
+                1,
+                result,
+                grade_trial(case, "skills", result, Path("/tmp")),
+            )
+        ]
+
+        report = build_report(
+            [case],
+            records,
+            harness_name="codex",
+            harness_version="codex-cli 1.2.3",
+            git_metadata={"commit": "abc123", "dirty": False},
+        )
+
+        summary = report["summary"]["skills"]["selection"]
+        self.assertEqual(summary["total"], 2)
+        self.assertEqual(summary["mean_per_run"], 2.0)
+        self.assertEqual(summary["multi_skill_runs"], 1)
+        self.assertEqual(summary["unexpected_runs"], 1)
+
 
 class CommandLineTests(unittest.TestCase):
     def test_list_prints_cases_without_running_a_harness(self):
@@ -399,6 +522,24 @@ class CommandLineTests(unittest.TestCase):
         self.assertEqual(status, 0)
         self.assertIn("quick", output.getvalue())
         self.assertIn("builder", output.getvalue())
+
+
+class SchemaCheckerTests(unittest.TestCase):
+    def test_checker_rejects_unknown_allowed_skill(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "case.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        **_case_dict("builder"),
+                        "allowed_skills": ["builder", "invented-skill"],
+                    }
+                )
+            )
+
+            errors = check_evals.check_case(path, {"builder"})
+
+        self.assertTrue(any("invented-skill" in error for error in errors))
 
 
 def _jsonl(events):

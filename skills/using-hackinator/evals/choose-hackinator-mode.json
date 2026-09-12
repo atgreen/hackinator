@@ -1,0 +1,11 @@
+{
+  "skills": ["using-hackinator"],
+  "query": "I want to approach some creative coding work with the hacker ethic, but I am not sure whether I should build a rough artifact or refine something that already works. Help me choose the right Hackinator mode.",
+  "expected_behavior": [
+    "Selects using-hackinator because the user explicitly needs help choosing a mode",
+    "Distinguishes builder from whittler and routes based on whether a working artifact exists",
+    "Does not begin a concrete build or craft pass before that choice is known"
+  ],
+  "should_not_select": ["builder", "whittler"],
+  "allowed_skills": ["using-hackinator"]
+}

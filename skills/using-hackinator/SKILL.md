@@ -1,6 +1,6 @@
 ---
 name: using-hackinator
-description: Use when starting creative build or craft work, deciding which hackinator skill fits, or when the user says "hack on this", "let's build something", "make it nice", or invokes the hacker ethic
+description: Use when the user asks which Hackinator mode or skill fits, wants orientation to the hacker ethic, or has not yet distinguished building from refining. Not for a concrete new build or prototype — that's builder — or polishing working code — that's whittler
 ---
 
 # Using Hackinator

@@ -1,0 +1,10 @@
+{
+  "skills": [],
+  "query": "In this temporary non-Git scratch directory, write a one-file Python example and run it once. There is no project or backlog here.",
+  "expected_behavior": [
+    "Does not select using-beads for explicitly non-Git scratch work",
+    "Completes the small artifact without attempting project task tracking"
+  ],
+  "should_not_select": ["using-beads"],
+  "allowed_skills": ["builder", "evidence-before-claims"]
+}

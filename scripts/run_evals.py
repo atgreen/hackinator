@@ -7,6 +7,7 @@ import argparse
 from dataclasses import asdict, dataclass, replace
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -25,6 +26,7 @@ class EvalCase:
     query: str
     expected_behavior: tuple[str, ...]
     should_not_select: tuple[str, ...] = ()
+    allowed_skills: tuple[str, ...] | None = None
     graders: tuple[dict[str, Any], ...] = ()
     workspace_write: bool = False
 
@@ -44,6 +46,21 @@ class EvalCase:
             raise ValueError(
                 f"{source}: skills or should_not_select must name at least one skill"
             )
+        allowed = None
+        if "allowed_skills" in data:
+            allowed = _strings(data["allowed_skills"], "allowed_skills", source)
+            missing_allowed = sorted(set(skills) - set(allowed))
+            if missing_allowed:
+                raise ValueError(
+                    f"{source}: allowed_skills must include required skills: "
+                    f"{', '.join(missing_allowed)}"
+                )
+            contradictory = sorted(set(allowed) & set(excluded))
+            if contradictory:
+                raise ValueError(
+                    f"{source}: skills cannot be both allowed and forbidden: "
+                    f"{', '.join(contradictory)}"
+                )
         graders = data.get("graders", [])
         if not isinstance(graders, list) or not all(isinstance(item, dict) for item in graders):
             raise ValueError(f"{source}: graders must be a list of objects")
@@ -60,6 +77,7 @@ class EvalCase:
             query=query.strip(),
             expected_behavior=tuple(expected),
             should_not_select=tuple(excluded),
+            allowed_skills=tuple(allowed) if allowed is not None else None,
             graders=tuple(graders),
             workspace_write=workspace_write,
         )
@@ -136,14 +154,35 @@ class ClaudeHarness:
     def parse(self, stream: str) -> AgentResult:
         return parse_claude_events(stream)
 
+    def environment(self, workspace: Path) -> dict[str, str]:
+        return os.environ.copy()
+
 
 class CodexHarness:
     name = "codex"
+
+    def __init__(
+        self,
+        *,
+        auth_source: Path | None = None,
+        external_skill_paths: Iterable[Path] | None = None,
+    ) -> None:
+        configured_home = Path(os.environ.get("CODEX_HOME", Path.home() / ".codex"))
+        self.auth_source = auth_source or configured_home / "auth.json"
+        self.external_skill_paths = tuple(
+            external_skill_paths
+            if external_skill_paths is not None
+            else _discover_external_skill_paths()
+        )
 
     def prepare_workspace(
         self, condition: str, workspace: Path, repo_root: Path
     ) -> None:
         _validate_condition(condition)
+        isolated_home = workspace / ".codex-home"
+        isolated_home.mkdir()
+        if self.auth_source.is_file():
+            (isolated_home / "auth.json").symlink_to(self.auth_source.resolve())
         if condition == "skills":
             shutil.copytree(repo_root / "skills", workspace / ".agents/skills")
 
@@ -172,6 +211,12 @@ class CodexHarness:
             "--cd",
             str(workspace),
         ]
+        if self.external_skill_paths:
+            entries = ", ".join(
+                f"{{ path = {json.dumps(str(path))}, enabled = false }}"
+                for path in self.external_skill_paths
+            )
+            command.extend(("--config", f"skills.config=[{entries}]"))
         if condition == "baseline":
             command.extend(("--config", "skills.include_instructions=false"))
         if model:
@@ -181,6 +226,11 @@ class CodexHarness:
 
     def parse(self, stream: str) -> AgentResult:
         return parse_codex_events(stream)
+
+    def environment(self, workspace: Path) -> dict[str, str]:
+        environment = os.environ.copy()
+        environment["CODEX_HOME"] = str(workspace / ".codex-home")
+        return environment
 
 
 Harness = ClaudeHarness | CodexHarness
@@ -304,6 +354,17 @@ def grade_trial(
                 else f"selected excluded skills: {', '.join(unexpected)}",
             )
         )
+    if condition == "skills" and case.allowed_skills is not None:
+        unexpected = sorted(selected - set(case.allowed_skills))
+        grades.append(
+            Grade(
+                "unexpected_skills",
+                not unexpected,
+                "all selected skills are allowed"
+                if not unexpected
+                else f"unexpected skills selected: {', '.join(unexpected)}",
+            )
+        )
 
     for index, grader in enumerate(case.graders, 1):
         grades.append(
@@ -355,6 +416,11 @@ def build_report(
                 "query": case.query,
                 "expected_behavior": list(case.expected_behavior),
                 "should_not_select": list(case.should_not_select),
+                "allowed_skills": (
+                    list(case.allowed_skills)
+                    if case.allowed_skills is not None
+                    else None
+                ),
                 "graders": list(case.graders),
                 "workspace_write": case.workspace_write,
             }
@@ -499,6 +565,7 @@ def _run_trial(
         completed = run_command(
             command,
             cwd=workspace,
+            env=harness.environment(workspace),
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -585,6 +652,16 @@ def _summarize(records: list[TrialRecord]) -> dict[str, Any]:
             for record in selected
             if record.result.cost_usd is not None
         ]
+        skill_selections = sum(
+            len(record.result.selected_skills) for record in selected
+        )
+        unexpected_runs = sum(
+            any(
+                grade.name == "unexpected_skills" and not grade.passed
+                for grade in record.grades
+            )
+            for record in selected
+        )
         summary[condition] = {
             "runs": len(selected),
             "errors": sum(record.result.error is not None for record in selected),
@@ -593,6 +670,16 @@ def _summarize(records: list[TrialRecord]) -> dict[str, Any]:
             "output_tokens": sum(record.result.output_tokens for record in selected),
             "cost_usd": round(sum(costs), 8) if costs else None,
             "duration_ms": sum(record.result.duration_ms or 0 for record in selected),
+            "selection": {
+                "total": skill_selections,
+                "mean_per_run": round(skill_selections / len(selected), 3)
+                if selected
+                else 0.0,
+                "multi_skill_runs": sum(
+                    len(record.result.selected_skills) > 1 for record in selected
+                ),
+                "unexpected_runs": unexpected_runs,
+            },
             "grades": grades,
         }
     return summary
@@ -785,6 +872,13 @@ def _validate_grader(grader: dict[str, Any], source: str, index: int) -> None:
 def _is_safe_relative_path(value: str) -> bool:
     path = Path(value)
     return bool(value) and not path.is_absolute() and ".." not in path.parts
+
+
+def _discover_external_skill_paths() -> tuple[Path, ...]:
+    roots = (Path.home() / ".agents/skills", Path("/etc/codex/skills"))
+    return tuple(
+        sorted(path for root in roots for path in root.glob("*/SKILL.md"))
+    )
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 ---
 name: using-beads
-description: Use at the start of and throughout ANY git-hosted work — tracking tasks, deferred TODOs, discovered bugs, follow-ups, dependencies, or "while I'm here" ideas. Triggers include "beads", "bd", "track this", "backlog", "file an issue", "what's ready to work on", or noticing work you're about to only keep in your head
+description: Use for durable task tracking when the current work is inside a Git repository — tasks, deferred TODOs, bugs, dependencies, "beads", "bd", "backlog", "file an issue", or "what's ready". Not for temporary or non-Git scratch work, even when writing code
 ---
 
 # Using Beads

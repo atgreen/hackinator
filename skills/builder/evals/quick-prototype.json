@@ -4,9 +4,18 @@
   "expected_behavior": [
     "Selects builder — making something real from scratch, fast",
     "Creates and runs a scraper.py that prints Example, Hello, and News",
+    "Does not load workflow techniques whose complexity, parallelism, or Git preconditions are absent",
     "Does not start polishing or refactoring code that does not exist yet"
   ],
-  "should_not_select": ["whittler", "shaping"],
+  "should_not_select": [
+    "whittler",
+    "shaping",
+    "walking-skeleton",
+    "dispatching-subagents",
+    "using-beads",
+    "using-hackinator"
+  ],
+  "allowed_skills": ["builder", "evidence-before-claims"],
   "workspace_write": true,
   "graders": [
     {"type": "file_exists", "path": "scraper.py"},

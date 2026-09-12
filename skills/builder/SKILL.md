@@ -23,8 +23,11 @@ You build in a tight loop. Each pass produces something you can run.
 
 1. **Name the itch.** One sentence: what will exist at the end that doesn't now, and how will you *see* it working? If you can't say it, you're not ready to build — you're ready to think.
 
-2. **Find the skeleton.** What is the thinnest path from input to visible output? Build *that* first, end to end, before filling anything in.
-   → **REQUIRED SUB-SKILL:** Use **walking-skeleton** to get an end-to-end slice running before you flesh out any single part.
+2. **Find the skeleton.** For a direct, one-artifact task, the requested artifact is already the
+   skeleton — build it. When the prototype has multiple parts or layers, find the thinnest path
+   from input to visible output and build *that* before filling any part in.
+   → **CONDITIONAL SUB-SKILL:** Use **walking-skeleton** only when multiple parts must connect end
+   to end; do not load it for a single direct artifact.
 
 3. **Retire the scariest unknown next.** Not the easiest part — the part most likely to kill the idea. If you don't know whether something is even possible, find out before you build around it.
    → **REQUIRED SUB-SKILL:** When an unknown blocks you, use **spike-and-stabilize** — a timeboxed throwaway probe to learn, then rebuild the answer cleanly.
@@ -45,8 +48,8 @@ ordering dependency, and never at the cost of drowning the host.
 - **Keep the writing serial.** The skeleton and its increments are a dependency chain — build them
   in order. Parallelize the *learning*, serialize the *making*.
 
-→ **REQUIRED SUB-SKILL:** Use **dispatching-subagents** to fan out safely — it sets the host budget
-(cheap reads wide, heavy builds narrow) so parallel work speeds you up instead of thrashing the machine.
+→ **CONDITIONAL SUB-SKILL:** Use **dispatching-subagents** only after identifying at least two
+substantial, independent work items. A one-file build or dependency chain stays serial.
 
 ## Scope Discipline
 
@@ -58,13 +61,12 @@ The enemy of a finished prototype is the feature that "would be easy to add whil
 | "Let me handle every edge case" | Handle the one on the happy path. Note the rest in a `TODO`. |
 | "I should abstract this" | Wait for the third copy. Two is a coincidence. |
 | "Needs proper error handling" | Let it crash loudly for now. A stack trace is feedback. |
-| "While I'm in here..." | File a bead, don't do it. Momentum over completeness. |
+| "While I'm in here..." | Leave it out of v1. Momentum over completeness. |
 
 ## What "Done" Means for a Builder
 
 - It **runs** and produces the visible output you named in step 1.
 - The happy path works end to end.
-- Everything you deferred is **filed as a bead** (`bd create` / `bd q`) — not a mental note, not a silent drop. → **REQUIRED SUB-SKILL:** Use **using-beads**; every "write it down" below is a bead.
 - You can *show* it, not just describe it.
 
 Done is **not**: pretty, general, fully tested, or optimized. Those are refinements. Reaching
